@@ -1,18 +1,22 @@
 #include "InariKonKon/Entitiy/Entity.hpp"
 
+#include "InariKonKon/Entitiy/EntitySystem.hpp"
+
 namespace ikk
 {
     Entity::Entity() noexcept : m_id(Entity::getNextEntityID())
     {
+        EntitySystem::addEntityToList(*this);
     }
 
-    Entity::Entity(const std::uint32_t id) noexcept : m_id(id)
+    Entity::Entity(const ID id) noexcept : m_id(id)
     {
+        EntitySystem::addEntityToList(*this);
     }
 
-    const std::uint32_t Entity::getNextEntityID() noexcept
+    const Entity::ID Entity::getNextEntityID() noexcept
     {
-        static std::uint32_t id = 0;
+        static ID id = 0;
         return ++id;
     }
 }

@@ -3,7 +3,7 @@
 #include "InariKonKon/Window/Window.hpp"
 #include "InariKonKon/Utility/Clock.hpp"
 
-#include "InariKonKon/Entitiy/Entity.hpp"
+#include "InariKonKon/Entitiy/EntitySystem.hpp"
 
 namespace ikk
 {
@@ -29,7 +29,7 @@ namespace ikk
         Window m_window;
         Clock m_clock;
 
-        std::vector<Entity> m_entities;
+        EntitySystem m_entitySystem;
 
         void handelEvents() noexcept;
         void render() noexcept;

@@ -5,6 +5,9 @@
 
 #include "InariKonKon/Utility/Utility.hpp"
 
+//TEMP
+#include "InariKonKon/Entitiy/Entity.hpp"
+
 namespace ikk
 {
     Application::Application(std::u8string_view title, const std::uint32_t width, const std::uint32_t height) noexcept
@@ -27,7 +30,14 @@ namespace ikk
             this->handelEvents();
             BENCHMARK_END();
 
-            BENCHMARK_BEGIN("UPDATE");  
+            BENCHMARK_BEGIN("UPDATE");
+            
+            static Entity ent{ 0 };
+            this->m_entitySystem.getEntities().at(0)->addComponent<int>();
+            const auto stuff1 = this->m_entitySystem.getEntities().at(0)->getComponent<int>();
+            this->m_entitySystem.getEntities().at(0)->getComponent<int>().get() = 12;
+            const auto stuff2 = this->m_entitySystem.getEntities().at(0)->getComponent<int>();
+            
             this->onUpdate(this->m_clock.getElapsedTime());
             BENCHMARK_END();
             
