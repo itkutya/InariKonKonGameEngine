@@ -3,6 +3,8 @@
 #include "InariKonKon/Window/Window.hpp"
 #include "InariKonKon/Utility/Clock.hpp"
 
+#include "InariKonKon/Entitiy/Entity.hpp"
+
 namespace ikk
 {
     class Application
@@ -26,6 +28,8 @@ namespace ikk
     private:
         Window m_window;
         Clock m_clock;
+
+        std::vector<Entity> m_entities;
 
         void handelEvents() noexcept;
         void render() noexcept;
