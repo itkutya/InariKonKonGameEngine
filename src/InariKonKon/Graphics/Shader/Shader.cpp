@@ -1,0 +1,51 @@
+#include "InariKonKon/Graphics/Shader/Shader.hpp"
+
+#include <exception>
+
+#include "shaderc/shaderc.hpp"
+#include "fmt/core.h"
+
+namespace ikk
+{
+    Shader::Shader(const Filesystem& code, const TYPE type) noexcept : m_code(code.getContents()), m_type(type)
+    {
+    }
+
+    const std::string& Shader::getShaderCode() const noexcept
+    {
+        return this->m_code;
+    }
+
+    const Shader::TYPE& Shader::getShaderCodeType() const noexcept
+    {
+        return this->m_type;
+    }
+
+    const std::vector<std::uint32_t> Shader::convertToSPIRV(const std::string& shaderCode, const TYPE type)
+    {
+        shaderc::Compiler compiler;
+        shaderc::CompileOptions options;
+        options.SetTargetEnvironment(shaderc_target_env_vulkan, shaderc_env_version_vulkan_1_3);
+        options.SetOptimizationLevel(shaderc_optimization_level_performance);
+
+        shaderc_shader_kind kind = shaderc_glsl_vertex_shader;
+        switch (type)
+        {
+        case VERTEX:
+        kind = shaderc_glsl_vertex_shader;
+            break;
+        case FRAGMENT:
+        kind = shaderc_glsl_fragment_shader;
+            break;
+        default:
+            throw std::runtime_error("Unsupported shader type");
+            return {};
+        }
+        shaderc::SpvCompilationResult module = compiler.CompileGlslToSpv(shaderCode, kind, "ShaderCode", options);
+
+        if (module.GetCompilationStatus() != shaderc_compilation_status_success)
+            fmt::print("{}", module.GetErrorMessage());
+
+        return std::vector<std::uint32_t>{ module.cbegin(), module.cend() };
+    }
+}
