@@ -7,9 +7,6 @@
 
 #define MAX_FRAMES_IN_FLIGHT 2
 
-//Temp...
-#include "InariKonKon/Graphics/Shader/Shader.hpp"
-
 namespace ikk
 {
     Vulkan::Vulkan(std::u8string_view title, GLFWwindow* window, const std::uint32_t width, const std::uint32_t height) noexcept
@@ -29,12 +26,6 @@ namespace ikk
         this->m_commandBuffers.reserve(MAX_FRAMES_IN_FLIGHT);
         for (std::size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
             this->m_commandBuffers.emplace_back(this->m_logicalDevice, this->m_commandPool);
-        
-        //TODO:
-        //temp...
-        Shader vertex{ Filesystem{ "/home/itkutya/Documents/c++/InariKonKonGameEngine/shaders/shader.vert" }, Shader::VERTEX };
-        Shader fragment { Filesystem{ "/home/itkutya/Documents/c++/InariKonKonGameEngine/shaders/shader.frag" }, Shader::FRAGMENT };
-        this->m_graphicsPipelines.emplace_back(this->m_logicalDevice, this->m_renderpass, vertex, fragment);
     }
 
     void Vulkan::onResize([[maybe_unused]] const std::uint32_t width, [[maybe_unused]] const std::uint32_t height) noexcept
@@ -67,8 +58,13 @@ namespace ikk
             
             commandBuffer.setViewport();
             commandBuffer.setScissor();
-            //TODO:
-            //Draw models...
+            
+            const auto range = this->m_objects.equal_range(graphicsPipeline);
+            for (auto it = range.first; it != range.second; ++it)
+            {
+                //TODO:
+                //Draw...
+            }
         }
     }
 
@@ -92,6 +88,11 @@ namespace ikk
             throw std::runtime_error("Failed to present swap chain image!");
 
         this->m_currentFrame = (this->m_currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
+    }
+
+    void Vulkan::renderObject(const Model<int, int>& model) noexcept
+    {
+        //this->m_graphicsPipelines.emplace_back(this->m_logicalDevice, this->m_renderpass, model.vertex, model.fragment, model.vertex);
     }
 
     void Vulkan::resizeToWindow() noexcept

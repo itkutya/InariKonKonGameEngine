@@ -35,13 +35,7 @@ namespace ikk
     {
         return BOOL(glfwWindowShouldClose(this->m_window));
     }
-
-    void Window::draw() const noexcept
-    {
-        //TODO:
-        //add to drawQueue...
-    }
-
+    
     GLFWwindow *Window::createWindow(const std::u8string_view title, const std::uint32_t width, const std::uint32_t height)
     {
         if (!glfwInit())

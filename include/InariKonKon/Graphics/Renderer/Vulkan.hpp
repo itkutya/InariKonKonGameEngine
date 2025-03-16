@@ -1,5 +1,7 @@
 #pragma once
 
+#include <unordered_map>
+
 #include "InariKonKon/Graphics/Renderer/Vulkan/Instance.hpp"
 #include "InariKonKon/Graphics/Renderer/Vulkan/Surface.hpp"
 #include "InariKonKon/Graphics/Renderer/Vulkan/PhysicalDevice.hpp"
@@ -10,8 +12,7 @@
 #include "InariKonKon/Graphics/Renderer/Vulkan/Framebuffer.hpp"
 #include "InariKonKon/Graphics/Renderer/Vulkan/CommandPool.hpp"
 #include "InariKonKon/Graphics/Renderer/Vulkan/CommandBuffer.hpp"
-//TODO:
-//Place into folders the rest of it...
+
 #include "InariKonKon/Graphics/Renderer/Vulkan/Buffer/VertexBuffer.hpp"
 #include "InariKonKon/Graphics/Renderer/Vulkan/Buffer/IndexBuffer.hpp"
 
@@ -36,6 +37,8 @@ namespace ikk
 
         void beginRender() override;
         void endRender() override;
+
+        void renderObject(const Model<int, int>& model) noexcept override;
     private:
         GLFWwindow* m_window;
 
@@ -55,6 +58,8 @@ namespace ikk
         
         bool m_windowResized = false;
         bool m_renderStarted = false;
+
+        std::unordered_multimap<GraphicsPipeline, int> m_objects;
 
         void resizeToWindow() noexcept;
     };

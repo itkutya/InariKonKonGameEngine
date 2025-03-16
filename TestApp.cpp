@@ -17,8 +17,11 @@ public:
 
     void onRender(const ikk::Window& window) noexcept override
     {
+        window.draw(ikk::Model<int, int>{fragment, vertex, {}, {} });
     }
 private:
+    ikk::Shader vertex{ ikk::Filesystem{ "/home/itkutya/Documents/c++/InariKonKonGameEngine/shaders/shader.vert" }, ikk::Shader::VERTEX };
+    ikk::Shader fragment { ikk::Filesystem{ "/home/itkutya/Documents/c++/InariKonKonGameEngine/shaders/shader.frag" }, ikk::Shader::FRAGMENT };
 };
 
 int main()

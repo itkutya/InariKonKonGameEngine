@@ -28,9 +28,8 @@ namespace ikk
 
         const bool shouldClose() const noexcept;
 
-        //TODO:
-        //Impl...
-        void draw() const noexcept;
+        template<class VertexType, class IndiciesType = std::uint16_t>
+        void draw(const Model<VertexType, IndiciesType>& model) const noexcept;
     private:
         std::u8string_view m_title;
         GLFWwindow* m_window;
@@ -48,4 +47,10 @@ namespace ikk
 
         friend class Application;
     };
+
+    template <class VertexType, class IndiciesType>
+    void Window::draw(const Model<VertexType, IndiciesType>& model) const noexcept
+    {
+        this->m_renderer->renderObject(model);
+    }
 }

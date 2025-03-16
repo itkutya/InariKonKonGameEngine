@@ -2,6 +2,8 @@
 
 #include <cstdint>
 
+#include "InariKonKon/Graphics/Model/Model.hpp"
+
 namespace ikk
 {
     class RendererBase
@@ -21,6 +23,8 @@ namespace ikk
 
         virtual void beginRender() = 0;
         virtual void endRender() = 0;
+
+        virtual void renderObject(const Model<int, int>& model) noexcept = 0;
     private:
         friend class Window;
         friend class Application;
