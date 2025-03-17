@@ -83,7 +83,7 @@ namespace ikk
             if (app == nullptr)
                 return;
             
-            app->getEventQueue().emplace_back(Event::WindowClosed{ });
+            app->getEventQueue().emplace_back(Event::WindowClosed{});
         };
         glfwSetWindowCloseCallback(this->m_window, windowClosedCallback);
     }

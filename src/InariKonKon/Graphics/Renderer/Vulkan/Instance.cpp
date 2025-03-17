@@ -114,13 +114,13 @@ namespace ikk
                 const VkDebugUtilsMessengerCallbackDataEXT *pCallbackData, void *pUserData) noexcept
             {
                 if (messageSeverity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT)
-                    Log(std::format("(Validation Layer): {}", pCallbackData->pMessage), Log::ERROR);
+                    Log(fmt::format("(Validation Layer): {}", pCallbackData->pMessage), Log::ERROR);
                 else if (messageSeverity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT)
-                    Log(std::format("(Validation Layer): {}", pCallbackData->pMessage), Log::WARNING);
+                    Log(fmt::format("(Validation Layer): {}", pCallbackData->pMessage), Log::WARNING);
                 else if (messageSeverity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT)
-                    Log(std::format("(Validation Layer): {}", pCallbackData->pMessage), Log::INFO);
+                    Log(fmt::format("(Validation Layer): {}", pCallbackData->pMessage), Log::INFO);
                 else
-                    Log(std::format("(Validation Layer): {}", pCallbackData->pMessage));
+                    Log(fmt::format("(Validation Layer): {}", pCallbackData->pMessage));
                 return VK_FALSE;
             };
             

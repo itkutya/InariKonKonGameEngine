@@ -2,6 +2,8 @@
 
 #include <fstream>
 
+#include "fmt/std.h"
+
 #include "InariKonKon/Utility/Log.hpp"
 
 namespace ikk
@@ -21,7 +23,7 @@ namespace ikk
             file.close();
         }
         else
-            Log(std::format("Faild to open file: {}", path.c_str()).c_str(), Log::ERROR, Log::ALL);
+            Log(fmt::format("Faild to open file: {}", path).c_str(), Log::ERROR, Log::ALL);
     }
 
     const std::filesystem::path& Filesystem::getPath() const noexcept

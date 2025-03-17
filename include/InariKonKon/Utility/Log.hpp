@@ -1,7 +1,8 @@
 #pragma once
 
 #include <string_view>
-#include <format>
+
+#include "fmt/core.h"
 
 #include "InariKonKon/Utility/Utility.hpp"
 

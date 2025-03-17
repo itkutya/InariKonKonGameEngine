@@ -3,7 +3,6 @@
 #include <assert.h>
 #include <cstdint>
 #include <chrono>
-#include <format>
 
 namespace ikk
 {
@@ -75,12 +74,3 @@ namespace ikk
 		return Time(std::chrono::microseconds(amount));
 	}
 }
-
-template<>
-struct std::formatter<ikk::Time> : std::formatter<std::chrono::microseconds>
-{
-    inline auto format(const ikk::Time& value, std::format_context& ctx) const
-	{
-        return std::formatter<std::chrono::microseconds>::format(value.toDuration(), ctx);
-    }
-};

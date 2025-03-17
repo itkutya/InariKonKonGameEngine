@@ -31,12 +31,3 @@ namespace ikk
 		std::chrono::steady_clock::time_point m_stopPoint{};
 	};
 }
-
-template <>
-struct std::formatter<ikk::Clock> : std::formatter<ikk::Time>
-{
-    inline auto format(const ikk::Clock& value, std::format_context& ctx) const
-	{
-        return std::formatter<ikk::Time>::format(value.getElapsedTime(), ctx);
-    }
-};
