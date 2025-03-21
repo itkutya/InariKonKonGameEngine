@@ -10,12 +10,16 @@ namespace ikk
     {
         this->createQueueIndices(physicalDevice, surface);
         this->createLogicalDevice(instance, physicalDevice);
+
+        DEBUG_LOG("Vulkan logical device created.", Log::INFO, Log::ALL);
     }
 
     LogicalDevice::~LogicalDevice() noexcept
     {
         vkDeviceWaitIdle(this->m_type);
         vkDestroyDevice(this->m_type, nullptr);
+
+        DEBUG_LOG("Vulkan logical device destroyed.", Log::INFO, Log::ALL);
     }
 
     const LogicalDevice::QueueFamilyIndices& LogicalDevice::getQueueFamilyIndices() const noexcept

@@ -135,6 +135,8 @@ namespace ikk
                 
             VK_CHECK(vkCreateInstance(&createInfo, nullptr, &this->m_type));
         #endif
+
+        DEBUG_LOG("Vulkan instance created.", Log::INFO, Log::ALL);
     }
     catch(const std::exception& e)
     {
@@ -147,6 +149,8 @@ namespace ikk
             s_validationLayer.destroy(this->m_type);
         #endif
         vkDestroyInstance(this->m_type, nullptr);
+
+        DEBUG_LOG("Vulkan instance Destroyed.", Log::INFO, Log::ALL);
     }
 
     const std::vector<const char*> Instance::getValidationLayers() noexcept

@@ -14,12 +14,16 @@ namespace ikk
         allocInfo.commandBufferCount = 1U;
 
         VK_CHECK(vkAllocateCommandBuffers(this->m_logicalDevice->getUnderlyingVkType(), &allocInfo, &this->m_type));
+
+        DEBUG_LOG("Vulkan command buffer created.", Log::INFO, Log::ALL);
     }
 
     CommandBuffer::~CommandBuffer() noexcept
     {
         vkDeviceWaitIdle(this->m_logicalDevice->getUnderlyingVkType());
         vkFreeCommandBuffers(this->m_logicalDevice->getUnderlyingVkType(), this->m_commandPool->getUnderlyingVkType(), 1U, &this->m_type);
+
+        DEBUG_LOG("Vulkan command buffer destroyed.", Log::INFO, Log::ALL);
     }
 
     void CommandBuffer::startRecording(const VkCommandBufferUsageFlags flags, const bool resetResources) noexcept

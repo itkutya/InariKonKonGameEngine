@@ -27,10 +27,14 @@ namespace ikk
         framebufferInfo.layers = 1;
 
         VK_CHECK(vkCreateFramebuffer(this->m_logicalDevice->getUnderlyingVkType(), &framebufferInfo, nullptr, &this->m_type));
+
+        DEBUG_LOG("Vulkan framebuffer created.", Log::INFO, Log::ALL);
     }
 
     void Framebuffer::destroy() noexcept
     {
         vkDestroyFramebuffer(this->m_logicalDevice->getUnderlyingVkType(), this->m_type, nullptr);
+
+        DEBUG_LOG("Vulkan framebuffer destroyed.", Log::INFO, Log::ALL);
     }
 }

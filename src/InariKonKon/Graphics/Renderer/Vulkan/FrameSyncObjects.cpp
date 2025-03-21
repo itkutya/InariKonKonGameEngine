@@ -16,6 +16,8 @@ namespace ikk
         VK_CHECK(vkCreateSemaphore(this->m_logicalDevice->getUnderlyingVkType(), &semaphoreInfo, nullptr, &this->m_imageAvailable));
         VK_CHECK(vkCreateSemaphore(this->m_logicalDevice->getUnderlyingVkType(), &semaphoreInfo, nullptr, &this->m_renderFinished));
         VK_CHECK(vkCreateFence(this->m_logicalDevice->getUnderlyingVkType(), &fenceInfo, nullptr, &this->m_inFlight));
+
+        DEBUG_LOG("Vulkan frame sync objects created.", Log::INFO, Log::ALL);
     }
     
     FrameSyncObjects::~FrameSyncObjects() noexcept
@@ -25,5 +27,7 @@ namespace ikk
         vkDestroySemaphore(this->m_logicalDevice->getUnderlyingVkType(), this->m_imageAvailable, nullptr);
         vkDestroySemaphore(this->m_logicalDevice->getUnderlyingVkType(), this->m_renderFinished, nullptr);
         vkDestroyFence(this->m_logicalDevice->getUnderlyingVkType(), this->m_inFlight, nullptr);
+
+        DEBUG_LOG("Vulkan frame sync objects destroyed.", Log::INFO, Log::ALL);
     }
 }

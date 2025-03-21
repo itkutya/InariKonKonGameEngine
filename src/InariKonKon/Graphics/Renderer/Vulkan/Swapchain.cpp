@@ -65,6 +65,8 @@ namespace ikk
 
         VK_CHECK(vkCreateSwapchainKHR(this->m_logicalDevice->getUnderlyingVkType(), &createInfo, nullptr, &this->m_type));
         this->createImageViews();
+
+        DEBUG_LOG("Vulkan swapchain created.", Log::INFO, Log::ALL);
     }
 
     void Swapchain::createImageViews() noexcept
@@ -106,6 +108,8 @@ namespace ikk
 		    vkDestroyImageView(this->m_logicalDevice->getUnderlyingVkType(), imageView, nullptr);
 
         vkDestroySwapchainKHR(this->m_logicalDevice->getUnderlyingVkType(), this->m_type, nullptr);
+
+        DEBUG_LOG("Vulkan swapchain destroyed.", Log::INFO, Log::ALL);
     }
 
     const VkResult Swapchain::acquireNextImage(std::uint32_t* imageIndex, const std::uint64_t timeout, const std::uint32_t frameIndex) noexcept

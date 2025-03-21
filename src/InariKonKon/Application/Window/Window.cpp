@@ -11,10 +11,12 @@
 namespace ikk
 {
     Window::Window(std::u8string_view title, const std::uint32_t width, const std::uint32_t height)
-    try : m_window(createWindow(title, width, height)), m_renderer(std::make_shared<Vulkan>(title, m_window, width, height))
+    try : m_window(createWindow(title, width, height)), m_renderer(std::make_shared<Vulkan>(title, m_window, width, height)), m_title(title)
     {
         glfwSetWindowUserPointer(this->m_window, this);
         this->setupWindowCallbacks();
+
+        DEBUG_LOG(fmt::format("{} (window) created.", TO_ANSI(title.data())), Log::INFO, Log::ALL);
     }
     catch(const std::exception& e)
     {
@@ -24,6 +26,8 @@ namespace ikk
     Window::~Window() noexcept
     {
         glfwDestroyWindow(this->m_window);
+
+        DEBUG_LOG(fmt::format("{} (window) destroyed.", TO_ANSI(this->m_title.data())), Log::INFO, Log::ALL);
     }
 
     void Window::pollEvents() noexcept

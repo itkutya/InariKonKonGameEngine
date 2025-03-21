@@ -111,12 +111,16 @@ namespace ikk
         pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
 
         VK_CHECK(vkCreateGraphicsPipelines(this->m_logicalDevice->getUnderlyingVkType(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &this->m_type));
+
+        DEBUG_LOG("Vulkan graphics pipeline created.", Log::INFO, Log::ALL);
     }
 
     GraphicsPipeline::~GraphicsPipeline() noexcept
     {
         vkDestroyPipeline(this->m_logicalDevice->getUnderlyingVkType(), this->m_type, nullptr);
         vkDestroyPipelineLayout(this->m_logicalDevice->getUnderlyingVkType(), this->m_pipelineLayout, nullptr);
+
+        DEBUG_LOG("Vulkan graphics pipeline destroyed.", Log::INFO, Log::ALL);
     }
 
     void GraphicsPipeline::bind(VkCommandBuffer &commandBuffer, const VkPipelineBindPoint pipelineBindPoint) noexcept

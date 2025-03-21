@@ -14,10 +14,14 @@ namespace ikk
         poolInfo.queueFamilyIndex = this->m_logicalDevice->getQueueFamilyIndices().graphicsFamily.value();
 
         VK_CHECK(vkCreateCommandPool(this->m_logicalDevice->getUnderlyingVkType(), &poolInfo, nullptr, &this->m_type));
+
+        DEBUG_LOG("Vulkan command pool created.", Log::INFO, Log::ALL);
     }
 
     CommandPool::~CommandPool() noexcept
     {
         vkDestroyCommandPool(this->m_logicalDevice->getUnderlyingVkType(), this->m_type, nullptr);
+
+        DEBUG_LOG("Vulkan command pool destroyed.", Log::INFO, Log::ALL);
     }
 }

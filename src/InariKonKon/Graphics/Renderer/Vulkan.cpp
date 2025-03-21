@@ -26,6 +26,8 @@ namespace ikk
         this->m_commandBuffers.reserve(MAX_FRAMES_IN_FLIGHT);
         for (std::size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
             this->m_commandBuffers.emplace_back(this->m_logicalDevice, this->m_commandPool);
+
+        DEBUG_LOG("Vulkan renderer created.", Log::INFO, Log::ALL);
     }
 
     void Vulkan::onResize([[maybe_unused]] const std::uint32_t width, [[maybe_unused]] const std::uint32_t height) noexcept

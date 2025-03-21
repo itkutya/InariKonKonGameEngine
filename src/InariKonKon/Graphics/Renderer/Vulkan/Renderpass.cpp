@@ -44,11 +44,15 @@ namespace ikk
         renderPassInfo.pDependencies = &dependency;
 
         VK_CHECK(vkCreateRenderPass(this->m_logicalDevice->getUnderlyingVkType(), &renderPassInfo, nullptr, &this->m_type));
+
+        DEBUG_LOG("Vulkan renderpass created.", Log::INFO, Log::ALL);
     }
 
     Renderpass::~Renderpass() noexcept
     {
         vkDestroyRenderPass(this->m_logicalDevice->getUnderlyingVkType(), this->m_type, nullptr);
+
+        DEBUG_LOG("Vulkan renderpass destroyed.", Log::INFO, Log::ALL);
     }
 
     void Renderpass::begin(VkCommandBuffer& commandBuffer, Swapchain& swapchain, Framebuffer& framebuffer) noexcept

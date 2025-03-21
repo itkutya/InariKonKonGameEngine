@@ -33,6 +33,8 @@ namespace ikk
         vkGetPhysicalDeviceFeatures(this->m_type, &this->m_features);
         vkGetPhysicalDeviceMemoryProperties(this->m_type, &this->m_memoryProperties);
         this->m_msaaSamples = this->getMaxUsableSampleCount();
+
+        DEBUG_LOG("Vulkan physical device created.", Log::INFO, Log::ALL);
     }
     catch(const std::exception& e)
     {

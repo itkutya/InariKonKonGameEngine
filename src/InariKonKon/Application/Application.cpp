@@ -5,16 +5,21 @@
 #define GLFW_INCLUDE_VULKAN
 #include "GLFW/glfw3.h"
 
+#include "InariKonKon/Utility/Log.hpp"
+
 namespace ikk
 {
     Application::Application(std::u8string_view title, const std::uint32_t width, const std::uint32_t height) noexcept
         : m_window(title, width, height), m_clock({})
     {
+        DEBUG_LOG("Application created.", Log::INFO, Log::ALL);
     }
 
     Application::~Application() noexcept
     {
         glfwTerminate();
+
+        DEBUG_LOG("Application destroyed.", Log::INFO, Log::ALL);
     }
 
     void Application::run() noexcept

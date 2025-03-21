@@ -10,11 +10,15 @@ namespace ikk
         : m_logicalDevice(&logicalDevice)
     {
         this->m_type = createShaderModule(shader);
+
+        DEBUG_LOG("Vulkan shader created.", Log::INFO, Log::ALL);
     }
 
     VulkanShader::~VulkanShader() noexcept
     {
         vkDestroyShaderModule(this->m_logicalDevice->getUnderlyingVkType(), this->m_type, nullptr);
+
+        DEBUG_LOG("Vulkan shader destroyed.", Log::INFO, Log::ALL);
     }
 
     const VkShaderModule VulkanShader::createShaderModule(const Shader& shader) const noexcept
