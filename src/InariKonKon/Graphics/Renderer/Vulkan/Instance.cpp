@@ -11,6 +11,8 @@
 namespace ikk
 {
 #ifdef IKK_DEBUG
+    //TODO:
+    //Move it somewhere else...
     class VulkanValidationLayer final : public ikk::VkType<VkDebugUtilsMessengerEXT>
     {
     public:
@@ -106,8 +108,7 @@ namespace ikk
             debugCreateInfo.messageType =
                 VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT     |
                 VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT  |
-                VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT |
-                VK_DEBUG_UTILS_MESSAGE_TYPE_DEVICE_ADDRESS_BINDING_BIT_EXT;
+                VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
 
             static auto debugCallback = [](
                 VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity, VkDebugUtilsMessageTypeFlagsEXT messageType,
