@@ -7,15 +7,16 @@
 
 namespace ikk
 {
+    template<class VertexType, class IndiciesType = std::uint16_t>
+    class VertexInfo
+    {
+    };
+
     class ModelBase
     {
     public:
-        class VertexInfo
-        {
-            
-        };
-
-        ModelBase(const Shader& fragment, const Shader& vertex) noexcept;
+        template<class VertexType, class IndiciesType = std::uint16_t>
+        ModelBase(const Shader& fragment, const Shader& vertex, const VertexInfo<VertexType, IndiciesType> info) noexcept;
 
         virtual ~ModelBase() noexcept = default;
 
@@ -31,6 +32,13 @@ namespace ikk
         Shader m_fragment;
         Shader m_vertex;
     };
+
+    template<class VertexType, class IndiciesType>
+    ModelBase::ModelBase(const Shader& fragment, const Shader& vertex, const VertexInfo<VertexType, IndiciesType> info) noexcept
+        : m_fragment(fragment), m_vertex(vertex)
+    {
+        
+    }
 
     //TODO:
     //Type safety...
@@ -55,7 +63,7 @@ namespace ikk
     template <class VertexType, class IndiciesType>
     Model<VertexType, IndiciesType>::Model(const Shader& fragment, const Shader& vertex,
                                            const std::vector<VertexType>& vertecies, const std::vector<IndiciesType>& indicies)
-        : ModelBase(fragment, vertex), m_vertecies(vertecies), m_indicies(indicies)
+        : ModelBase(fragment, vertex, VertexInfo<VertexType, IndiciesType>{}), m_vertecies(vertecies), m_indicies(indicies)
     {
     }
 }
