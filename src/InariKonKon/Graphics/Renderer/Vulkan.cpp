@@ -95,6 +95,9 @@ namespace ikk
 
     void Vulkan::renderObject(const ModelBase& model) noexcept
     {
+        //TODO:
+        //FIX ME!
+        //Nothing wrong just ugly...
         const auto& hash = std::hash<std::string>{}(model.getFragmentShader().getShaderCode()) + std::hash<std::string>{}(model.getVertexShader().getShaderCode());
         
         if (this->m_objects.contains(hash) == false)
