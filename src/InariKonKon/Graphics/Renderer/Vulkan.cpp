@@ -61,13 +61,13 @@ namespace ikk
             commandBuffer.setViewport();
             commandBuffer.setScissor();
             
-            const auto range = this->m_objects.equal_range(&graphicsPipeline);
+            //TODO:
+            //Draw...
+            const auto range = this->m_objects.equal_range(graphicsPipeline.m_id);
             for (auto it = range.first; it != range.second; ++it)
             {
-                //TODO:
-                //Draw...
+                const auto& model = it->second;
             }
-
         }
     }
 
@@ -95,13 +95,21 @@ namespace ikk
 
     void Vulkan::renderObject(const ModelBase& model) noexcept
     {
-        static bool once = true;
-        if (once)
+        const auto& hash = std::hash<std::string>{}(model.getFragmentShader().getShaderCode()) + std::hash<std::string>{}(model.getVertexShader().getShaderCode());
+        
+        if (this->m_objects.contains(hash) == false)
         {
             this->m_graphicsPipelines.emplace_back(this->m_logicalDevice, this->m_renderpass, model.getVertexShader(), model.getFragmentShader());
-            this->m_objects.emplace(std::make_pair(&this->m_graphicsPipelines.back(), &model));
-            once = false;
+            this->m_objects.emplace(std::make_pair(hash, &model));
+            return;
         }
+
+        const auto range = this->m_objects.equal_range(hash);
+        for (auto it = range.first; it != range.second; ++it)
+            if (it->second == &model)
+                return;
+        
+        this->m_objects.emplace(std::make_pair(hash, &model));
     }
 
     void Vulkan::resizeToWindow() noexcept

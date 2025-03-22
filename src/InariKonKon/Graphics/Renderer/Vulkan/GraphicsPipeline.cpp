@@ -4,10 +4,13 @@
 
 #include "InariKonKon/Graphics/Renderer/Vulkan/Shader/Shader.hpp"
 
+#include "InariKonKon/Graphics/Shader/Shader.hpp"
+
 namespace ikk
 {
     GraphicsPipeline::GraphicsPipeline(LogicalDevice& logicalDevice, Renderpass& renderpass, const Shader& vertex, const Shader& fragment) noexcept
-        : m_logicalDevice(&logicalDevice)
+        : m_logicalDevice(&logicalDevice),
+        m_id(std::hash<std::string>{}(fragment.getShaderCode()) + std::hash<std::string>{}(vertex.getShaderCode()))
     {
         VulkanShader VkVertexShader { *this->m_logicalDevice, vertex };
         VulkanShader VkFragmentShader { *this->m_logicalDevice, fragment };

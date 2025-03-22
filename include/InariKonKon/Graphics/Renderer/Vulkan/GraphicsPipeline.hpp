@@ -18,6 +18,8 @@ namespace ikk
 
         GraphicsPipeline& operator=(const GraphicsPipeline&) noexcept = default;
         GraphicsPipeline& operator=(GraphicsPipeline&&) noexcept = default;
+
+        std::size_t m_id = 0;
     protected:
         void bind(VkCommandBuffer& commandBuffer, const VkPipelineBindPoint pipelineBindPoint) noexcept;
     private:

@@ -59,7 +59,7 @@ namespace ikk
         bool m_windowResized = false;
         bool m_renderStarted = false;
 
-        std::unordered_multimap<const GraphicsPipeline*, const ModelBase*> m_objects;
+        std::unordered_multimap<std::size_t, const ModelBase*> m_objects;
 
         void resizeToWindow() noexcept;
     };

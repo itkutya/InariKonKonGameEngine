@@ -10,6 +10,11 @@ namespace ikk
     class ModelBase
     {
     public:
+        class VertexInfo
+        {
+            
+        };
+
         ModelBase(const Shader& fragment, const Shader& vertex) noexcept;
 
         virtual ~ModelBase() noexcept = default;
