@@ -61,12 +61,13 @@ namespace ikk
             commandBuffer.setViewport();
             commandBuffer.setScissor();
             
-            const auto range = this->m_objects.equal_range(graphicsPipeline);
+            const auto range = this->m_objects.equal_range(&graphicsPipeline);
             for (auto it = range.first; it != range.second; ++it)
             {
                 //TODO:
                 //Draw...
             }
+
         }
     }
 
@@ -92,9 +93,15 @@ namespace ikk
         this->m_currentFrame = (this->m_currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
     }
 
-    void Vulkan::renderObject(const Model<int, int>& model) noexcept
+    void Vulkan::renderObject(const ModelBase& model) noexcept
     {
-        //this->m_graphicsPipelines.emplace_back(this->m_logicalDevice, this->m_renderpass, model.vertex, model.fragment, model.vertex);
+        static bool once = true;
+        if (once)
+        {
+            this->m_graphicsPipelines.emplace_back(this->m_logicalDevice, this->m_renderpass, model.getVertexShader(), model.getFragmentShader());
+            this->m_objects.emplace(std::make_pair(&this->m_graphicsPipelines.back(), &model));
+            once = false;
+        }
     }
 
     void Vulkan::resizeToWindow() noexcept

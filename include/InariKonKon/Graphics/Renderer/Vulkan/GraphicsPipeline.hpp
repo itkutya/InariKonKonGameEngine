@@ -28,23 +28,3 @@ namespace ikk
         friend class CommandBuffer;
     };
 }
-
-//TODO:
-//Hash & comp op.
-template<>
-struct std::hash<ikk::GraphicsPipeline>
-{
-    std::size_t operator()(const ikk::GraphicsPipeline& graphicsPipeline) const noexcept
-    {
-        return 0;
-    }
-};
-
-template <> 
-struct std::equal_to<ikk::GraphicsPipeline>
-{
-    bool operator()(const ikk::GraphicsPipeline& lhs, const ikk::GraphicsPipeline& rhs) const
-    {
-        return 0 == 0;
-    } 
-};
