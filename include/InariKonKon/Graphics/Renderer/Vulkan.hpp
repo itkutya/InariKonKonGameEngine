@@ -38,7 +38,7 @@ namespace ikk
         void beginRender() override;
         void endRender() override;
 
-        void renderObject(const ModelBase& model) noexcept override;
+        void addModelToRenderQueue(const ModelBase& model) noexcept override;
     private:
         GLFWwindow* m_window;
 
@@ -59,7 +59,9 @@ namespace ikk
         bool m_windowResized = false;
         bool m_renderStarted = false;
 
-        std::unordered_multimap<std::size_t, const ModelBase*> m_objects;
+        std::unordered_map<GraphicsPipeline*, std::vector<const ModelBase*>> m_objects;
+
+        const bool findModel(GraphicsPipeline* graphicspipeline, const ModelBase& model) const noexcept;
 
         void resizeToWindow() noexcept;
     };

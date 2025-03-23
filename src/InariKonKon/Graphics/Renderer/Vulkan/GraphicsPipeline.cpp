@@ -8,9 +8,13 @@
 
 namespace ikk
 {
+    const std::uint32_t GraphicsPipeline::createID(const Shader& vertex, const Shader& fragment) noexcept
+    {
+        return U32(std::hash<std::string>{}(vertex.getShaderCode()) + std::hash<std::string>{}(fragment.getShaderCode()));
+    };
+
     GraphicsPipeline::GraphicsPipeline(LogicalDevice& logicalDevice, Renderpass& renderpass, const Shader& vertex, const Shader& fragment) noexcept
-        : m_logicalDevice(&logicalDevice),
-        m_id(std::hash<std::string>{}(fragment.getShaderCode()) + std::hash<std::string>{}(vertex.getShaderCode()))
+        : m_logicalDevice(&logicalDevice), m_id(createID(vertex, fragment))
     {
         VulkanShader VkVertexShader { *this->m_logicalDevice, vertex };
         VulkanShader VkFragmentShader { *this->m_logicalDevice, fragment };
@@ -126,6 +130,11 @@ namespace ikk
         DEBUG_LOG("Vulkan graphics pipeline destroyed.", Log::INFO, Log::ALL);
     }
 
+    const std::uint32_t GraphicsPipeline::getID() const noexcept
+    {
+        return this->m_id;
+    }
+    
     void GraphicsPipeline::bind(VkCommandBuffer &commandBuffer, const VkPipelineBindPoint pipelineBindPoint) noexcept
     {
         vkCmdBindPipeline(commandBuffer, pipelineBindPoint, this->m_type);

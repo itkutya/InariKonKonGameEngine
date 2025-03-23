@@ -1,5 +1,8 @@
 #include "InariKonKon/Graphics/Renderer/Vulkan.hpp"
 
+#include <algorithm>
+#include <ranges>
+
 #define GLFW_INCLUDE_VULKAN
 #include "GLFW/glfw3.h"
 
@@ -61,12 +64,10 @@ namespace ikk
             commandBuffer.setViewport();
             commandBuffer.setScissor();
             
-            //TODO:
-            //Draw...
-            const auto range = this->m_objects.equal_range(graphicsPipeline.m_id);
-            for (auto it = range.first; it != range.second; ++it)
-            {
-                const auto& model = it->second;
+            for (const auto& obj : this->m_objects.at(&graphicsPipeline))
+            {                
+                //TODO:
+                //Draw...
             }
         }
     }
@@ -93,26 +94,33 @@ namespace ikk
         this->m_currentFrame = (this->m_currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
     }
 
-    void Vulkan::renderObject(const ModelBase& model) noexcept
+    const bool Vulkan::findModel(GraphicsPipeline* graphicspipeline, const ModelBase& model) const noexcept
     {
-        //TODO:
-        //FIX ME!
-        //Nothing wrong just ugly...
-        const auto& hash = std::hash<std::string>{}(model.getFragmentShader().getShaderCode()) + std::hash<std::string>{}(model.getVertexShader().getShaderCode());
+        for (const auto& modelObj : this->m_objects.at(graphicspipeline))
+            if (modelObj == &model)
+                return true;
+        return false;
+    }
+
+    void Vulkan::addModelToRenderQueue(const ModelBase& model) noexcept
+    {
+        const auto id = GraphicsPipeline::createID(model.getVertexShader(), model.getFragmentShader());
+        const auto search = std::ranges::find_if(this->m_graphicsPipelines,
+            [&id](const GraphicsPipeline& graphicsPipeline)
+            {
+                return graphicsPipeline.getID() == id;
+            });
         
-        if (this->m_objects.contains(hash) == false)
+        if (search != this->m_graphicsPipelines.end())
+        {
+            if (this->findModel(search.base(), model) == false)
+                this->m_objects.at(search.base()).emplace_back(&model);
+        }
+        else
         {
             this->m_graphicsPipelines.emplace_back(this->m_logicalDevice, this->m_renderpass, model.getVertexShader(), model.getFragmentShader());
-            this->m_objects.emplace(std::make_pair(hash, &model));
-            return;
+            this->m_objects.emplace(&this->m_graphicsPipelines.front(), std::vector<const ModelBase*>{1, &model});
         }
-
-        const auto range = this->m_objects.equal_range(hash);
-        for (auto it = range.first; it != range.second; ++it)
-            if (it->second == &model)
-                return;
-        
-        this->m_objects.emplace(std::make_pair(hash, &model));
     }
 
     void Vulkan::resizeToWindow() noexcept

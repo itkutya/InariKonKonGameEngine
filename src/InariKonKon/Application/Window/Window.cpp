@@ -42,7 +42,7 @@ namespace ikk
 
     void Window::draw(const ModelBase& model) const noexcept
     {
-        this->m_renderer->renderObject(model);
+        this->m_renderer->addModelToRenderQueue(model);
     }
 
     GLFWwindow *Window::createWindow(const std::u8string_view title, const std::uint32_t width, const std::uint32_t height)
