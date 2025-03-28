@@ -4,8 +4,7 @@
 
 namespace ikk
 {
-    /*
-    VertexBuffer::VertexBuffer(LogicalDevice& logicalDevice, PhysicalDevice& physicalDevice, const std::vector<Vertex>& vertecies) noexcept
+    VertexBuffer::VertexBuffer(LogicalDevice& logicalDevice, PhysicalDevice& physicalDevice, const std::vector<UIVertex>& vertecies) noexcept
         : Buffer(logicalDevice)
     {
         this->create(physicalDevice, sizeof(vertecies.at(0)) * vertecies.size(),
@@ -13,11 +12,10 @@ namespace ikk
         this->update((const void*)vertecies.data());
     }
 
-    VertexBuffer::VertexBuffer(LogicalDevice &logicalDevice, PhysicalDevice &physicalDevice, const std::vector<Vertex> &vertecies, CommandPool &commandPool) noexcept
+    VertexBuffer::VertexBuffer(LogicalDevice &logicalDevice, PhysicalDevice &physicalDevice, const std::vector<UIVertex> &vertecies, CommandPool &commandPool) noexcept
         : Buffer(logicalDevice)
     {
         this->create(physicalDevice, sizeof(vertecies.at(0)) * vertecies.size(), VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
             VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, &commandPool, (const void*)vertecies.data());
     }
-    */
 }

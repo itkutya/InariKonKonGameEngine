@@ -68,6 +68,16 @@ namespace ikk
             {                
                 //TODO:
                 //Draw...
+                const std::vector<UIVertex> vertexData = {   
+                                                            {{0.0f, -0.5f}, {1.0f, 1.0f, 1.0f}},
+                                                            {{0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}},
+                                                            {{-0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}}
+                                                         };
+                static VertexBuffer buffer{ this->m_logicalDevice, this->m_physicalDevice, vertexData};
+                VkBuffer vertexBuffers[] = { buffer.getUnderlyingVkType() };
+                VkDeviceSize offsets[] = { 0 };
+                vkCmdBindVertexBuffers(commandBuffer.getUnderlyingVkType(), 0, 1, vertexBuffers, offsets);
+                vkCmdDraw(commandBuffer.getUnderlyingVkType(), static_cast<uint32_t>(3), 1, 0, 0);
             }
         }
     }
@@ -104,7 +114,7 @@ namespace ikk
 
     void Vulkan::addModelToRenderQueue(const ModelBase& model) noexcept
     {
-        const auto id = GraphicsPipeline::createID(model.getVertexShader(), model.getFragmentShader());
+        const auto id = GraphicsPipeline::createID(model);
         const auto search = std::ranges::find_if(this->m_graphicsPipelines,
             [&id](const GraphicsPipeline& graphicsPipeline)
             {
@@ -118,8 +128,8 @@ namespace ikk
         }
         else
         {
-            this->m_graphicsPipelines.emplace_back(this->m_logicalDevice, this->m_renderpass, model.getVertexShader(), model.getFragmentShader());
-            this->m_objects.emplace(&this->m_graphicsPipelines.front(), std::vector<const ModelBase*>{1, &model});
+            this->m_graphicsPipelines.emplace_back(this->m_logicalDevice, this->m_renderpass, model);
+            this->m_objects.emplace(&this->m_graphicsPipelines.front(), std::vector<const ModelBase*>{ 1, &model });
         }
     }
 

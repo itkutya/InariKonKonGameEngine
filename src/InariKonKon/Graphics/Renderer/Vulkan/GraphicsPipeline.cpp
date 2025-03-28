@@ -4,20 +4,20 @@
 
 #include "InariKonKon/Graphics/Renderer/Vulkan/Shader/Shader.hpp"
 
-#include "InariKonKon/Graphics/Shader/Shader.hpp"
+#include "InariKonKon/Graphics/Model/Model.hpp"
 
 namespace ikk
 {
-    const std::uint32_t GraphicsPipeline::createID(const Shader& vertex, const Shader& fragment) noexcept
+    const std::uint32_t GraphicsPipeline::createID(const ModelBase& model) noexcept
     {
-        return U32(std::hash<std::string>{}(vertex.getShaderCode()) + std::hash<std::string>{}(fragment.getShaderCode()));
+        return U32(std::hash<std::string>{}(model.getVertexShader().getShaderCode()) + std::hash<std::string>{}(model.getFragmentShader().getShaderCode()));
     };
 
-    GraphicsPipeline::GraphicsPipeline(LogicalDevice& logicalDevice, Renderpass& renderpass, const Shader& vertex, const Shader& fragment) noexcept
-        : m_logicalDevice(&logicalDevice), m_id(createID(vertex, fragment))
+    GraphicsPipeline::GraphicsPipeline(LogicalDevice& logicalDevice, Renderpass& renderpass, const ModelBase& model) noexcept
+        : m_logicalDevice(&logicalDevice), m_id(createID(model))
     {
-        VulkanShader VkVertexShader { *this->m_logicalDevice, vertex };
-        VulkanShader VkFragmentShader { *this->m_logicalDevice, fragment };
+        VulkanShader VkVertexShader { *this->m_logicalDevice, model.getVertexShader() };
+        VulkanShader VkFragmentShader { *this->m_logicalDevice, model.getFragmentShader() };
 
         VkPipelineShaderStageCreateInfo vertShaderStageInfo{};
         vertShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
@@ -33,15 +33,39 @@ namespace ikk
 
         VkPipelineShaderStageCreateInfo shaderStages[] = { vertShaderStageInfo, fragShaderStageInfo };
 
-        //auto bindingDescription = Vertex::getBindingDescription();
-        //auto attributeDescriptions = Vertex::getAttributeDescriptions();
+        const auto bindingDescription = [](const VertexInfo& info) noexcept
+        {
+            VkVertexInputBindingDescription bindingDescription{};
+            bindingDescription.binding = info.binding;
+            bindingDescription.stride = info.stride;
+            bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+            return bindingDescription;
+        }(model.getVertexInfo());
+
+        const auto attributeDescriptions = [](const VertexInfo& info) noexcept
+        {
+            std::vector<VkVertexInputAttributeDescription> attributeDescriptions{ info.attributes.size() };
+
+            for (std::size_t i = 0; i < attributeDescriptions.size(); ++i)
+            {
+                attributeDescriptions[i].binding = info.attributes.at(i).binding;
+                attributeDescriptions[i].location = info.attributes.at(i).location;
+                if (i == 0)
+                    attributeDescriptions[i].format = VK_FORMAT_R32G32_SFLOAT;
+                else
+                    attributeDescriptions[i].format = VK_FORMAT_R32G32B32A32_SFLOAT;
+                attributeDescriptions[i].offset = info.attributes.at(i).offset;
+            }
+
+            return attributeDescriptions;
+        }(model.getVertexInfo());
 
         VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
         vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-        vertexInputInfo.vertexBindingDescriptionCount = 0;//1;
-        vertexInputInfo.pVertexBindingDescriptions = nullptr;//&bindingDescription;
-        vertexInputInfo.vertexAttributeDescriptionCount = 0;//static_cast<uint32_t>(attributeDescriptions.size());
-        vertexInputInfo.pVertexAttributeDescriptions = nullptr;//attributeDescriptions.data();
+        vertexInputInfo.vertexBindingDescriptionCount = 1;
+        vertexInputInfo.pVertexBindingDescriptions = &bindingDescription;
+        vertexInputInfo.vertexAttributeDescriptionCount = static_cast<std::uint32_t>(attributeDescriptions.size());
+        vertexInputInfo.pVertexAttributeDescriptions = attributeDescriptions.data();
 
         VkPipelineInputAssemblyStateCreateInfo inputAssembly{};
         inputAssembly.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;

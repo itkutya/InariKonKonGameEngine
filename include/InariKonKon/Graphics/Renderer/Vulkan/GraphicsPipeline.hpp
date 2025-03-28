@@ -4,12 +4,12 @@
 
 namespace ikk
 {
-    class Shader;
+    class ModelBase;
 
     class GraphicsPipeline final : public VkType<VkPipeline>
     {
     public:
-        GraphicsPipeline(LogicalDevice& logicalDevice, Renderpass& renderpass, const Shader& vertex, const Shader& fragment) noexcept;
+        GraphicsPipeline(LogicalDevice& logicalDevice, Renderpass& renderpass, const ModelBase& model) noexcept;
 
         ~GraphicsPipeline() noexcept;
 
@@ -29,7 +29,7 @@ namespace ikk
 
         std::uint32_t m_id = 0;
 
-        static const std::uint32_t createID(const Shader& vertex, const Shader& fragment) noexcept;
+        static const std::uint32_t createID(const ModelBase& model) noexcept;
 
         friend class CommandBuffer;
         friend class Vulkan;
