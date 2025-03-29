@@ -5,7 +5,6 @@
 #define GLFW_INCLUDE_VULKAN
 #include "GLFW/glfw3.h"
 
-#include "InariKonKon/Graphics/Renderer/Vulkan.hpp"
 #include "InariKonKon/Utility/Log.hpp"
 
 namespace ikk
@@ -38,11 +37,6 @@ namespace ikk
     const bool Window::shouldClose() const noexcept
     {
         return BOOL(glfwWindowShouldClose(this->m_window));
-    }
-
-    void Window::draw(const ModelBase& model) const noexcept
-    {
-        this->m_renderer->addModelToRenderQueue(model);
     }
 
     GLFWwindow *Window::createWindow(const std::u8string_view title, const std::uint32_t width, const std::uint32_t height)

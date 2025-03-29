@@ -64,20 +64,14 @@ namespace ikk
             commandBuffer.setViewport();
             commandBuffer.setScissor();
             
-            for (const auto& obj : this->m_objects.at(&graphicsPipeline))
+            for (const auto& obj : this->m_objects.at(0))
             {                
                 //TODO:
                 //Draw...
-                const std::vector<UIVertex> vertexData = {   
-                                                            {{0.0f, -0.5f}, {1.0f, 1.0f, 1.0f}},
-                                                            {{0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}},
-                                                            {{-0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}}
-                                                         };
-                static VertexBuffer buffer{ this->m_logicalDevice, this->m_physicalDevice, vertexData};
-                VkBuffer vertexBuffers[] = { buffer.getUnderlyingVkType() };
+                VkBuffer vertexBuffers[] = { obj.vertexBuffer->getUnderlyingVkType() };
                 VkDeviceSize offsets[] = { 0 };
                 vkCmdBindVertexBuffers(commandBuffer.getUnderlyingVkType(), 0, 1, vertexBuffers, offsets);
-                vkCmdDraw(commandBuffer.getUnderlyingVkType(), static_cast<uint32_t>(3), 1, 0, 0);
+                vkCmdDraw(commandBuffer.getUnderlyingVkType(), static_cast<std::uint32_t>(3), 1, 0, 0);
             }
         }
     }
@@ -102,35 +96,6 @@ namespace ikk
             throw std::runtime_error("Failed to present swap chain image!");
 
         this->m_currentFrame = (this->m_currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
-    }
-
-    const bool Vulkan::findModel(GraphicsPipeline* graphicspipeline, const ModelBase& model) const noexcept
-    {
-        for (const auto& modelObj : this->m_objects.at(graphicspipeline))
-            if (modelObj == &model)
-                return true;
-        return false;
-    }
-
-    void Vulkan::addModelToRenderQueue(const ModelBase& model) noexcept
-    {
-        const auto id = GraphicsPipeline::createID(model);
-        const auto search = std::ranges::find_if(this->m_graphicsPipelines,
-            [&id](const GraphicsPipeline& graphicsPipeline)
-            {
-                return graphicsPipeline.getID() == id;
-            });
-        
-        if (search != this->m_graphicsPipelines.end())
-        {
-            if (this->findModel(search.base(), model) == false)
-                this->m_objects.at(search.base()).emplace_back(&model);
-        }
-        else
-        {
-            this->m_graphicsPipelines.emplace_back(this->m_logicalDevice, this->m_renderpass, model);
-            this->m_objects.emplace(&this->m_graphicsPipelines.front(), std::vector<const ModelBase*>{ 1, &model });
-        }
     }
 
     void Vulkan::resizeToWindow() noexcept

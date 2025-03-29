@@ -4,20 +4,17 @@
 
 #include "InariKonKon/Graphics/Renderer/Vulkan/Shader/Shader.hpp"
 
-#include "InariKonKon/Graphics/Model/Model.hpp"
+#include "InariKonKon/Graphics/Shader/Shader.hpp"
+#include "InariKonKon/Graphics/Vertex/Vertex.hpp"
 
 namespace ikk
 {
-    const std::uint32_t GraphicsPipeline::createID(const ModelBase& model) noexcept
+    GraphicsPipeline::GraphicsPipeline(LogicalDevice& logicalDevice, Renderpass& renderpass,
+                                       const Shader& fragment, const Shader& vertex, const VertexInfo& info) noexcept
+        : m_logicalDevice(&logicalDevice)
     {
-        return U32(std::hash<std::string>{}(model.getVertexShader().getShaderCode()) + std::hash<std::string>{}(model.getFragmentShader().getShaderCode()));
-    };
-
-    GraphicsPipeline::GraphicsPipeline(LogicalDevice& logicalDevice, Renderpass& renderpass, const ModelBase& model) noexcept
-        : m_logicalDevice(&logicalDevice), m_id(createID(model))
-    {
-        VulkanShader VkVertexShader { *this->m_logicalDevice, model.getVertexShader() };
-        VulkanShader VkFragmentShader { *this->m_logicalDevice, model.getFragmentShader() };
+        VulkanShader VkFragmentShader { *this->m_logicalDevice, fragment };
+        VulkanShader VkVertexShader { *this->m_logicalDevice, vertex };
 
         VkPipelineShaderStageCreateInfo vertShaderStageInfo{};
         vertShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
@@ -39,8 +36,17 @@ namespace ikk
             bindingDescription.binding = info.binding;
             bindingDescription.stride = info.stride;
             bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+            switch (info.inputRate)
+            {
+            case VertexInfo::InputRate::Per_Vertex:
+                bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+                break;
+            case VertexInfo::InputRate::Per_Instance:
+                bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_INSTANCE;
+                break;
+            }
             return bindingDescription;
-        }(model.getVertexInfo());
+        }(info);
 
         const auto attributeDescriptions = [](const VertexInfo& info) noexcept
         {
@@ -50,15 +56,28 @@ namespace ikk
             {
                 attributeDescriptions[i].binding = info.attributes.at(i).binding;
                 attributeDescriptions[i].location = info.attributes.at(i).location;
-                if (i == 0)
+
+                switch (info.attributes.at(i).format)
+                {
+                case VertexAttributes::Format::Float:
+                    attributeDescriptions[i].format = VK_FORMAT_R32_SFLOAT;
+                    break;
+                case VertexAttributes::Format::Vec2:
                     attributeDescriptions[i].format = VK_FORMAT_R32G32_SFLOAT;
-                else
+                    break;
+                case VertexAttributes::Format::Vec3:
+                    attributeDescriptions[i].format = VK_FORMAT_R32G32B32_SFLOAT;
+                    break;
+                case VertexAttributes::Format::Vec4:
                     attributeDescriptions[i].format = VK_FORMAT_R32G32B32A32_SFLOAT;
+                    break;
+                }
+                    
                 attributeDescriptions[i].offset = info.attributes.at(i).offset;
             }
 
             return attributeDescriptions;
-        }(model.getVertexInfo());
+        }(info);
 
         VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
         vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
@@ -152,11 +171,6 @@ namespace ikk
         vkDestroyPipelineLayout(this->m_logicalDevice->getUnderlyingVkType(), this->m_pipelineLayout, nullptr);
 
         DEBUG_LOG("Vulkan graphics pipeline destroyed.", Log::INFO, Log::ALL);
-    }
-
-    const std::uint32_t GraphicsPipeline::getID() const noexcept
-    {
-        return this->m_id;
     }
     
     void GraphicsPipeline::bind(VkCommandBuffer &commandBuffer, const VkPipelineBindPoint pipelineBindPoint) noexcept

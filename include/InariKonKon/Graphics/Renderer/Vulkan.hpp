@@ -38,7 +38,8 @@ namespace ikk
         void beginRender() override;
         void endRender() override;
 
-        void addModelToRenderQueue(const ModelBase& model) noexcept override;
+        template<class VertexType, class IndiciesType>
+        void draw(const Model<VertexType, IndiciesType>& model) noexcept;
     private:
         GLFWwindow* m_window;
 
@@ -59,10 +60,39 @@ namespace ikk
         bool m_windowResized = false;
         bool m_renderStarted = false;
 
-        std::unordered_map<GraphicsPipeline*, std::vector<const ModelBase*>> m_objects;
+        struct RenderBuffer
+        {
+            std::shared_ptr<Buffer> vertexBuffer = nullptr;
+            std::shared_ptr<Buffer> indexBuffer = nullptr;
+        };
 
-        const bool findModel(GraphicsPipeline* graphicspipeline, const ModelBase& model) const noexcept;
+        std::unordered_map<std::uint32_t, std::vector<RenderBuffer>> m_objects;
 
         void resizeToWindow() noexcept;
     };
+
+    template <class VertexType, class IndiciesType>
+    void Vulkan::draw(const Model<VertexType, IndiciesType>& model) noexcept
+    {
+        static bool once = true;
+        if (once)
+        {
+            const auto& vertecies = model.getVertecies();
+            const auto& indicies = model.getIndicies();
+
+            const RenderBuffer& buffer =
+                {
+                    .vertexBuffer = std::make_shared<VertexBuffer<VertexType>>(this->m_logicalDevice, this->m_physicalDevice, vertecies),
+                    .indexBuffer = nullptr
+                };
+
+            this->m_graphicsPipelines.emplace_back(this->m_logicalDevice, this->m_renderpass,
+                model.getFragmentShader(), model.getVertexShader(), model.getVertexInfo());
+
+            this->m_objects.emplace(std::make_pair(0, std::vector<RenderBuffer>{}));
+            this->m_objects.at(0).emplace_back(buffer);
+
+            once = false;
+        }
+    }
 }

@@ -5,7 +5,8 @@
 #include <queue>
 
 #include "InariKonKon/Application/Window/Event/Event.hpp"
-#include "InariKonKon/Graphics/Renderer/RendererBase.hpp"
+
+#include "InariKonKon/Graphics/Renderer/Vulkan.hpp"
 
 struct GLFWwindow;
 
@@ -28,7 +29,8 @@ namespace ikk
 
         const bool shouldClose() const noexcept;
 
-        void draw(const ModelBase& model) const noexcept;
+        template<class VertexType, class IndiciesType>
+        void draw(const Model<VertexType, IndiciesType>& model) const noexcept;
     private:
         std::u8string_view m_title;
         GLFWwindow* m_window;
@@ -46,4 +48,12 @@ namespace ikk
 
         friend class Application;
     };
+
+    template <class VertexType, class IndiciesType>
+    void Window::draw(const Model<VertexType, IndiciesType>& model) const noexcept
+    {
+        //TODO:
+        //Make renderer changeable...
+        static_cast<Vulkan*>(this->m_renderer.get())->draw(model);
+    }
 }

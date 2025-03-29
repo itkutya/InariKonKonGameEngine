@@ -4,8 +4,6 @@
 
 #include "InariKonKon/Graphics/Model/Model.hpp"
 
-#include <print>
-
 namespace ikk
 {
     class RendererBase
@@ -25,8 +23,6 @@ namespace ikk
 
         virtual void beginRender() = 0;
         virtual void endRender() = 0;
-
-        virtual void addModelToRenderQueue(const ModelBase& model) noexcept = 0;
     private:
         friend class Window;
         friend class Application;
