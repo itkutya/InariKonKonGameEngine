@@ -30,6 +30,8 @@ namespace ikk
 
         const bool shouldClose() const noexcept;
 
+        //Idea?
+        //Make a render window class that is a templated class, that has a renderer as a member...
         template<class VertexType, class IndiciesType>
         void draw(const Model<VertexType, IndiciesType>& model) const noexcept;
     private:
