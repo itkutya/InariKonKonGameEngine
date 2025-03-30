@@ -66,7 +66,7 @@ namespace ikk
             std::shared_ptr<Buffer> indexBuffer = nullptr;
         };
 
-        std::unordered_map<std::uint32_t, std::vector<RenderBuffer>> m_objects;
+        std::unordered_map<GraphicsPipeline*, std::vector<RenderBuffer>> m_objects;
 
         void resizeToWindow() noexcept;
     };
@@ -74,6 +74,8 @@ namespace ikk
     template <class VertexType, class IndiciesType>
     void Vulkan::draw(const Model<VertexType, IndiciesType>& model) noexcept
     {
+        //TODO:
+        //Impl...
         static bool once = true;
         if (once)
         {
@@ -86,11 +88,10 @@ namespace ikk
                     .indexBuffer = nullptr
                 };
 
-            this->m_graphicsPipelines.emplace_back(this->m_logicalDevice, this->m_renderpass,
-                model.getFragmentShader(), model.getVertexShader(), model.getVertexInfo());
+            this->m_graphicsPipelines.emplace_back(this->m_logicalDevice, this->m_renderpass, model);
 
-            this->m_objects.emplace(std::make_pair(0, std::vector<RenderBuffer>{}));
-            this->m_objects.at(0).emplace_back(buffer);
+            this->m_objects.emplace(std::make_pair(&this->m_graphicsPipelines.front(), std::vector<RenderBuffer>{}));
+            this->m_objects.at(&this->m_graphicsPipelines.front()).emplace_back(buffer);
 
             once = false;
         }

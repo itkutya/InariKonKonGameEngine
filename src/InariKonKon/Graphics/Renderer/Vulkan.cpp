@@ -64,7 +64,7 @@ namespace ikk
             commandBuffer.setViewport();
             commandBuffer.setScissor();
             
-            for (const auto& obj : this->m_objects.at(0))
+            for (const auto& obj : this->m_objects.at(&graphicsPipeline))
             {
                 VkDeviceSize offsets[] = { 0 };
                 vkCmdBindVertexBuffers(commandBuffer.getUnderlyingVkType(), 0, 1, &obj.vertexBuffer->getUnderlyingVkType(), offsets);

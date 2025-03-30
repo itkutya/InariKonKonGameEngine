@@ -5,9 +5,8 @@
 #include <queue>
 
 #include "InariKonKon/Application/Window/Event/Event.hpp"
-
 //TODO:
-//Somehow remove this...
+//Remove this somehow...
 #include "InariKonKon/Graphics/Renderer/Vulkan.hpp"
 
 struct GLFWwindow;
@@ -55,7 +54,7 @@ namespace ikk
     void Window::draw(const Model<VertexType, IndiciesType>& model) const noexcept
     {
         //TODO:
-        //Make renderer changeable...
+        //Make OpenGL renderer as well...
         static_cast<Vulkan*>(this->m_renderer.get())->draw(model);
     }
 }
