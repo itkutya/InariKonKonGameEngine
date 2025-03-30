@@ -24,9 +24,9 @@ private:
     inline static ikk::Shader vertex{ ikk::Filesystem{ "/home/itkutya/Documents/c++/InariKonKonGameEngine/shaders/shader.vert" }, ikk::Shader::VERTEX };
     inline static ikk::Shader fragment { ikk::Filesystem{ "/home/itkutya/Documents/c++/InariKonKonGameEngine/shaders/shader.frag" }, ikk::Shader::FRAGMENT };
     inline static ikk::Model<ikk::UIVertex> model1 { fragment, vertex, {   
-                                                                        { { 0.0f, -0.5f }, { 1.0f, 1.0f, 1.0f }},
+                                                                        { { 0.0f, -0.5f }, { 0.0f, 1.0f, 1.0f }},
                                                                         { { 0.5f,  0.5f }, { 0.0f, 1.0f, 0.0f }},
-                                                                        { {-0.5f,  0.5f }, { 0.0f, 0.0f, 1.0f }}
+                                                                        { {-0.5f,  0.5f }, { 0.0f, 1.0f, 1.0f }}
                                                                        }
                                                    };
     //inline static ikk::Model<TestVertex, std::uint32_t> model2{fragment, vertex, {}, {} };

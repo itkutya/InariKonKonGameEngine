@@ -6,6 +6,8 @@
 
 #include "InariKonKon/Application/Window/Event/Event.hpp"
 
+//TODO:
+//Somehow remove this...
 #include "InariKonKon/Graphics/Renderer/Vulkan.hpp"
 
 struct GLFWwindow;

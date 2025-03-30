@@ -23,56 +23,7 @@ namespace ikk
         virtual void free() noexcept final;
 
         virtual void update(const void* data);
-
-        template<class Self>
-        [[nodiscard]] inline auto&& getPhysicalDevice(this Self&& self) noexcept
-        {
-            return std::forward<decltype(self)>(self).m_physicalDevice;
-        }
-
-        template<class Self>
-        [[nodiscard]] inline auto&& getLogicalDevice(this Self&& self) noexcept
-        {
-            return std::forward<decltype(self)>(self).m_logicalDevice;
-        }
-
-        template<class Self>
-        [[nodiscard]] inline auto&& getCommandPool(this Self&& self) noexcept
-        {
-            return std::forward<decltype(self)>(self).m_commandPool;
-        }
-
-        template<class Self>
-        [[nodiscard]] inline auto&& getDeviceMemory(this Self&& self) noexcept
-        {
-            return std::forward<decltype(self)>(self).m_vertexBufferMemory;
-        }
-
-        template<class Self>
-        [[nodiscard]] inline auto&& getMemorySize(this Self&& self) noexcept
-        {
-            return std::forward<decltype(self)>(self).m_size;
-        }
-
-        template<class Self>
-        [[nodiscard]] inline auto&& getState(this Self&& self) noexcept
-        {
-            return std::forward<decltype(self)>(self).m_state;
-        }
-
-        template<class Self>
-        [[nodiscard]] inline auto&& getBufferUsageFlags(this Self&& self) noexcept
-        {
-            return std::forward<decltype(self)>(self).m_usage;
-        }
-
-        template<class Self>
-        [[nodiscard]] inline auto&& getMemoryPropertyFlags(this Self&& self) noexcept
-        {
-            return std::forward<decltype(self)>(self).m_properties;
-        }
     private:
-        PhysicalDevice* m_physicalDevice = nullptr;
         LogicalDevice* m_logicalDevice = nullptr;
         CommandPool* m_commandPool = nullptr;
 
@@ -84,6 +35,8 @@ namespace ikk
         VkMemoryPropertyFlags m_properties = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
 
         const std::uint32_t findMemoryType(PhysicalDevice& physicalDevice, const std::uint32_t typeFilter) const;
+
+        friend void copyBuffer(const Buffer& srcBuffer, Buffer& dstBuffer);
     };
 
     void copyBuffer(const Buffer& srcBuffer, Buffer& dstBuffer);

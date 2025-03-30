@@ -65,12 +65,9 @@ namespace ikk
             commandBuffer.setScissor();
             
             for (const auto& obj : this->m_objects.at(0))
-            {                
-                //TODO:
-                //Draw...
-                VkBuffer vertexBuffers[] = { obj.vertexBuffer->getUnderlyingVkType() };
+            {
                 VkDeviceSize offsets[] = { 0 };
-                vkCmdBindVertexBuffers(commandBuffer.getUnderlyingVkType(), 0, 1, vertexBuffers, offsets);
+                vkCmdBindVertexBuffers(commandBuffer.getUnderlyingVkType(), 0, 1, &obj.vertexBuffer->getUnderlyingVkType(), offsets);
                 vkCmdDraw(commandBuffer.getUnderlyingVkType(), static_cast<std::uint32_t>(3), 1, 0, 0);
             }
         }

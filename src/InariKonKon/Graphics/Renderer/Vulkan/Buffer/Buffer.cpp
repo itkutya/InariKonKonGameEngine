@@ -18,7 +18,6 @@ namespace ikk
 
     void Buffer::create(PhysicalDevice &physicalDevice, const VkDeviceSize size, const VkBufferUsageFlags usage, const VkMemoryPropertyFlags properties)
     {
-        this->m_physicalDevice = &physicalDevice;
         this->m_size = size;
         this->m_usage = usage;
         this->m_properties = properties;
@@ -54,7 +53,6 @@ namespace ikk
         allocInfo.memoryTypeIndex = this->findMemoryType(physicalDevice, memRequirements.memoryTypeBits);
 
         VK_CHECK(vkAllocateMemory(this->m_logicalDevice->getUnderlyingVkType(), &allocInfo, nullptr, &this->m_vertexBufferMemory));
-
         VK_CHECK(vkBindBufferMemory(this->m_logicalDevice->getUnderlyingVkType(), this->m_type, this->m_vertexBufferMemory, 0));
     }
 
@@ -69,7 +67,6 @@ namespace ikk
             stagingBuffer.update(data);
 
             this->create(physicalDevice, size, VK_BUFFER_USAGE_TRANSFER_DST_BIT | usage, properties);
-        
             copyBuffer(stagingBuffer, *this);
         }
         else
@@ -82,7 +79,7 @@ namespace ikk
     void Buffer::free() noexcept
     {
         vkDeviceWaitIdle(this->m_logicalDevice->getUnderlyingVkType());
-            
+
         vkDestroyBuffer(this->m_logicalDevice->getUnderlyingVkType(), this->m_type, nullptr);
         vkFreeMemory(this->m_logicalDevice->getUnderlyingVkType(), this->m_vertexBufferMemory, nullptr);
     }
@@ -100,7 +97,7 @@ namespace ikk
         VkPhysicalDeviceMemoryProperties memProperties;
         vkGetPhysicalDeviceMemoryProperties(physicalDevice.getUnderlyingVkType(), &memProperties);
 
-        for (uint32_t i = 0; i < memProperties.memoryTypeCount; i++)
+        for (std::uint32_t i = 0; i < memProperties.memoryTypeCount; ++i)
             if ((typeFilter & (1 << i)) && (memProperties.memoryTypes[i].propertyFlags & this->m_properties) == this->m_properties)
                 return i;
 
@@ -109,12 +106,12 @@ namespace ikk
 
     void copyBuffer(const Buffer& srcBuffer, Buffer& dstBuffer)
     {
-        CommandBuffer commandBuffer{ *dstBuffer.getLogicalDevice(), *dstBuffer.getCommandPool() };
+        CommandBuffer commandBuffer{ *dstBuffer.m_logicalDevice, *dstBuffer.m_commandPool };
 
         commandBuffer.startRecording(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
 
         VkBufferCopy copyRegion{};
-        copyRegion.size = dstBuffer.getMemorySize();
+        copyRegion.size = dstBuffer.m_size;
         vkCmdCopyBuffer(commandBuffer.getUnderlyingVkType(), srcBuffer.getUnderlyingVkType(), dstBuffer.getUnderlyingVkType(), 1, &copyRegion);
 
         commandBuffer.endRecording();
@@ -124,7 +121,7 @@ namespace ikk
         submitInfo.commandBufferCount = 1;
         submitInfo.pCommandBuffers = &commandBuffer.getUnderlyingVkType();
 
-        vkQueueSubmit(dstBuffer.getLogicalDevice()->getGraphicsQueue(), 1, &submitInfo, VK_NULL_HANDLE);
-        vkQueueWaitIdle(dstBuffer.getLogicalDevice()->getGraphicsQueue());
+        vkQueueSubmit(dstBuffer.m_logicalDevice->getGraphicsQueue(), 1, &submitInfo, VK_NULL_HANDLE);
+        vkQueueWaitIdle(dstBuffer.m_logicalDevice->getGraphicsQueue());
     }
 }
