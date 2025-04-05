@@ -38,8 +38,8 @@ namespace ikk
         void beginRender() override;
         void endRender() override;
 
-        template<class VertexType, class IndiciesType>
-        void draw(const Model<VertexType, IndiciesType>& model) noexcept;
+        template<class VerteciesType, class IndiciesType = void*>
+        void draw(const Model<VerteciesType, IndiciesType>* model) noexcept;
     private:
         GLFWwindow* m_window;
 
@@ -65,30 +65,30 @@ namespace ikk
             std::shared_ptr<Buffer> vertexBuffer = nullptr;
             std::shared_ptr<Buffer> indexBuffer = nullptr;
         };
-
         std::unordered_map<GraphicsPipeline*, std::vector<RenderBuffer>> m_objects;
 
         void resizeToWindow() noexcept;
     };
 
-    template <class VertexType, class IndiciesType>
-    void Vulkan::draw(const Model<VertexType, IndiciesType>& model) noexcept
+    template <class VerteciesType, class IndiciesType>
+    void Vulkan::draw(const Model<VerteciesType, IndiciesType>* model) noexcept
     {
         //TODO:
         //Impl...
         static bool once = true;
         if (once)
         {
-            const auto& vertecies = model.getVertecies();
-            const auto& indicies = model.getIndicies();
+            const auto& vertecies = model->getVertecies();
+            const auto& indicies = model->getIndicies();
 
             const RenderBuffer& buffer =
                 {
-                    .vertexBuffer = std::make_shared<VertexBuffer<VertexType>>(this->m_logicalDevice, this->m_physicalDevice, vertecies),
+                    .vertexBuffer = std::make_shared<VertexBuffer<VerteciesType>>(this->m_logicalDevice, this->m_physicalDevice, vertecies),
                     .indexBuffer = nullptr
                 };
 
-            this->m_graphicsPipelines.emplace_back(this->m_logicalDevice, this->m_renderpass, model);
+            auto& graphicsPipeline = this->m_graphicsPipelines.emplace_back(this->m_logicalDevice);
+            graphicsPipeline.create(this->m_renderpass, model->getFragmentShader(), model->getVertexShader(), model->getVertexInfo());
 
             this->m_objects.emplace(std::make_pair(&this->m_graphicsPipelines.front(), std::vector<RenderBuffer>{}));
             this->m_objects.at(&this->m_graphicsPipelines.front()).emplace_back(buffer);

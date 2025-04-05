@@ -6,8 +6,7 @@
 
 namespace ikk
 {
-    VulkanShader::VulkanShader(LogicalDevice& logicalDevice, const Shader& shader) noexcept
-        : m_logicalDevice(&logicalDevice)
+    VulkanShader::VulkanShader(LogicalDevice& logicalDevice, const Shader& shader) noexcept : m_logicalDevice(&logicalDevice)
     {
         this->m_type = createShaderModule(shader);
 

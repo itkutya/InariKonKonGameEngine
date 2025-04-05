@@ -3,7 +3,7 @@
 class TestApp : public ikk::Application
 {
 public:
-    TestApp() noexcept : ikk::Application(u8"日本", 800, 600)
+    TestApp() noexcept : ikk::Application(u8"日本", 800, 600, ikk::Engine::Vulkan)
     {
     }
 
@@ -15,9 +15,9 @@ public:
     {
     }
 
-    void onRender(const ikk::Window& window) noexcept override
+    void onRender(const ikk::RenderWindow& window) noexcept override
     {
-        window.draw(model1);
+        window.draw(&model1);
         //window.draw(model2);
     }
 private:

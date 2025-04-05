@@ -4,11 +4,14 @@
 
 namespace ikk
 {
+    GraphicsPipeline::GraphicsPipeline(LogicalDevice& logicalDevice) noexcept : m_logicalDevice(&logicalDevice)
+    {
+    }
+    
     GraphicsPipeline::~GraphicsPipeline() noexcept
     {
         vkDestroyPipeline(this->m_logicalDevice->getUnderlyingVkType(), this->m_type, nullptr);
         vkDestroyPipelineLayout(this->m_logicalDevice->getUnderlyingVkType(), this->m_pipelineLayout, nullptr);
-
         DEBUG_LOG("Vulkan graphics pipeline destroyed.", Log::INFO, Log::ALL);
     }
     
@@ -17,22 +20,73 @@ namespace ikk
         vkCmdBindPipeline(commandBuffer, pipelineBindPoint, this->m_type);
     }
 
-    void GraphicsPipeline::create(Renderpass& renderpass, const VulkanShader& fragment, const VulkanShader& vertex,
-        const VkVertexInputBindingDescription& bindingDescription, const std::vector<VkVertexInputAttributeDescription>& attributeDescriptions) noexcept
+    void GraphicsPipeline::create(Renderpass& renderpass, const Shader& fragment, const Shader& vertex, const VertexInfo& info) noexcept
     {
+        VulkanShader VkFragmentShader { *this->m_logicalDevice, fragment };
+        VulkanShader VkVertexShader { *this->m_logicalDevice, vertex };
+
         VkPipelineShaderStageCreateInfo vertShaderStageInfo{};
         vertShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
         vertShaderStageInfo.stage = VK_SHADER_STAGE_VERTEX_BIT;
-        vertShaderStageInfo.module = vertex.getUnderlyingVkType();
+        vertShaderStageInfo.module = VkVertexShader.getUnderlyingVkType();
         vertShaderStageInfo.pName = "main";
 
         VkPipelineShaderStageCreateInfo fragShaderStageInfo{};
         fragShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
         fragShaderStageInfo.stage = VK_SHADER_STAGE_FRAGMENT_BIT;
-        fragShaderStageInfo.module = fragment.getUnderlyingVkType();
+        fragShaderStageInfo.module = VkFragmentShader.getUnderlyingVkType();
         fragShaderStageInfo.pName = "main";
 
         VkPipelineShaderStageCreateInfo shaderStages[] = { vertShaderStageInfo, fragShaderStageInfo };
+
+        const auto bindingDescription = [](const VertexInfo& info) noexcept
+        {
+            VkVertexInputBindingDescription bindingDescription{};
+            bindingDescription.binding = info.binding;
+            bindingDescription.stride = info.stride;
+            bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+            switch (info.inputRate)
+            {
+            case VertexInfo::InputRate::Per_Vertex:
+                bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+                break;
+            case VertexInfo::InputRate::Per_Instance:
+                bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_INSTANCE;
+                break;
+            }
+            return bindingDescription;
+        }(info);
+
+        const auto attributeDescriptions = [](const VertexInfo& info) noexcept
+        {
+            std::vector<VkVertexInputAttributeDescription> attributeDescriptions{ info.attributes.size() };
+
+            for (std::size_t i = 0; i < attributeDescriptions.size(); ++i)
+            {
+                attributeDescriptions[i].binding = info.attributes.at(i).binding;
+                attributeDescriptions[i].location = info.attributes.at(i).location;
+
+                switch (info.attributes.at(i).format)
+                {
+                case VertexAttributes::Format::Float:
+                    attributeDescriptions[i].format = VK_FORMAT_R32_SFLOAT;
+                    break;
+                case VertexAttributes::Format::Vec2:
+                    attributeDescriptions[i].format = VK_FORMAT_R32G32_SFLOAT;
+                    break;
+                case VertexAttributes::Format::Vec3:
+                    attributeDescriptions[i].format = VK_FORMAT_R32G32B32_SFLOAT;
+                    break;
+                case VertexAttributes::Format::Vec4:
+                    attributeDescriptions[i].format = VK_FORMAT_R32G32B32A32_SFLOAT;
+                    break;
+                }
+                    
+                attributeDescriptions[i].offset = info.attributes.at(i).offset;
+            }
+
+            return attributeDescriptions;
+        }(info);
 
         VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
         vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;

@@ -5,9 +5,6 @@
 #include <queue>
 
 #include "InariKonKon/Application/Window/Event/Event.hpp"
-//TODO:
-//Remove this somehow...
-#include "InariKonKon/Graphics/Renderer/Vulkan.hpp"
 
 struct GLFWwindow;
 
@@ -29,16 +26,13 @@ namespace ikk
         void pollEvents() noexcept;
 
         const bool shouldClose() const noexcept;
-
-        //Idea?
-        //Make a render window class that is a templated class, that has a renderer as a member...
-        template<class VertexType, class IndiciesType>
-        void draw(const Model<VertexType, IndiciesType>& model) const noexcept;
+    protected:
+        virtual void onResize([[maybe_unused]] const std::uint32_t width, [[maybe_unused]] const std::uint32_t height) noexcept;
+        
+        GLFWwindow* m_window;
     private:
         std::u8string_view m_title;
-        GLFWwindow* m_window;
         std::deque<Event> m_eventQueue;
-        std::shared_ptr<RendererBase> m_renderer;
 
         GLFWwindow* createWindow(const std::u8string_view title, const std::uint32_t width, const std::uint32_t height);
         void setupWindowCallbacks() noexcept;
@@ -46,17 +40,6 @@ namespace ikk
         const std::deque<Event>& getEventQueue() const noexcept;
         std::deque<Event>& getEventQueue() noexcept;
 
-        const std::shared_ptr<RendererBase>& getRenderer() const noexcept;
-        std::shared_ptr<RendererBase>& getRenderer() noexcept;
-
         friend class Application;
     };
-
-    template <class VertexType, class IndiciesType>
-    void Window::draw(const Model<VertexType, IndiciesType>& model) const noexcept
-    {
-        //TODO:
-        //Make OpenGL renderer as well...
-        static_cast<Vulkan*>(this->m_renderer.get())->draw(model);
-    }
 }

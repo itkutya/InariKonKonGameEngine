@@ -10,7 +10,7 @@
 namespace ikk
 {
     Window::Window(std::u8string_view title, const std::uint32_t width, const std::uint32_t height)
-    try : m_window(createWindow(title, width, height)), m_renderer(std::make_shared<Vulkan>(title, m_window, width, height)), m_title(title)
+    try : m_window(createWindow(title, width, height)), m_title(title)
     {
         glfwSetWindowUserPointer(this->m_window, this);
         this->setupWindowCallbacks();
@@ -39,6 +39,10 @@ namespace ikk
         return BOOL(glfwWindowShouldClose(this->m_window));
     }
 
+    void Window::onResize(const std::uint32_t width, const std::uint32_t height) noexcept
+    {
+    }
+
     GLFWwindow *Window::createWindow(const std::u8string_view title, const std::uint32_t width, const std::uint32_t height)
     {
         if (!glfwInit())
@@ -64,6 +68,7 @@ namespace ikk
                 return;
             
             app->getEventQueue().emplace_back(Event::WindowResized{ .width = U32(width), .height = U32(height) });
+            app->onResize(U32(width), U32(height));
         };
         glfwSetWindowSizeCallback(this->m_window, windowResizeCallback);
 
@@ -75,7 +80,7 @@ namespace ikk
                 return;
             
             app->getEventQueue().emplace_back(Event::WindowFramebufferResized{ .width = U32(width), .height = U32(height) });
-            app->getRenderer()->onResize(U32(width), U32(height));
+            app->onResize(U32(width), U32(height));
         };
         glfwSetFramebufferSizeCallback(this->m_window, framebufferResizeCallback);
 
@@ -99,15 +104,5 @@ namespace ikk
     std::deque<Event> &Window::getEventQueue() noexcept
     {
         return this->m_eventQueue;
-    }
-
-    const std::shared_ptr<RendererBase> &Window::getRenderer() const noexcept
-    {
-        return this->m_renderer;
-    }
-
-    std::shared_ptr<RendererBase>& Window::getRenderer() noexcept
-    {
-        return this->m_renderer;
     }
 }

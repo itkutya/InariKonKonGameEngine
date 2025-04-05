@@ -1,6 +1,6 @@
 #pragma once
 
-#include "InariKonKon/Application/Window/Window.hpp"
+#include "InariKonKon/Application/Window/RenderWindow.hpp"
 #include "InariKonKon/Utility/Clock.hpp"
 
 namespace ikk
@@ -11,7 +11,7 @@ namespace ikk
         //TODO:
         //Save application size & info
         //Application(std::u8string_view title) noexcept;
-        Application(std::u8string_view title, const std::uint32_t width, const std::uint32_t height) noexcept;
+        Application(std::u8string_view title, const std::uint32_t width, const std::uint32_t height, const Engine engine) noexcept;
 
         virtual ~Application() noexcept;
 
@@ -23,13 +23,15 @@ namespace ikk
 
         virtual void onEvent(const Event& event) noexcept = 0;
         virtual void onUpdate(const Time& dt) noexcept = 0;
-        virtual void onRender(const Window& window) noexcept = 0;
+        virtual void onRender(const RenderWindow& window) noexcept = 0;
 
         virtual void run() noexcept final;
     private:
-        Window m_window;
+        RenderWindow m_window;
         Clock m_clock;
         Time m_deltaTime;
+
+        std::uint32_t m_fps = 60;
 
         void handelEvents() noexcept;
         void update() noexcept;
