@@ -1,4 +1,5 @@
-#pragma once
+#ifndef IKK_WINDOW_HPP
+#define IKK_WINDOW_HPP
 
 #include <string_view>
 #include <memory>
@@ -43,3 +44,5 @@ namespace ikk
         friend class Application;
     };
 }
+
+#endif

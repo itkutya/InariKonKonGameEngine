@@ -1,4 +1,5 @@
-#pragma once
+#ifndef IKK_SWAPCHAIN_HPP
+#define IKK_SWAPCHAIN_HPP
 
 #include "InariKonKon/Graphics/Renderer/Vulkan/LogicalDevice.hpp"
 #include "InariKonKon/Graphics/Renderer/Vulkan/FrameSyncObjects.hpp"
@@ -49,3 +50,5 @@ namespace ikk
         void setExtent(const std::uint32_t width, const std::uint32_t height) noexcept;
     };
 }
+
+#endif

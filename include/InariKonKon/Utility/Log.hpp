@@ -1,4 +1,5 @@
-#pragma once
+#ifndef IKK_LOG_HPP
+#define IKK_LOG_HPP
 
 #include <string_view>
 
@@ -41,4 +42,6 @@ namespace ikk
     #define DEBUG_LOG(msg, lvl, flags) ikk::Log(msg, lvl, flags)
 #else
     #define DEBUG_LOG(msg, lvl, flags) ((void)0)
+#endif
+
 #endif

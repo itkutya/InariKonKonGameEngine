@@ -1,4 +1,5 @@
-#pragma once
+#ifndef IKK_FILESYSTEM_HPP
+#define IKK_FILESYSTEM_HPP
 
 #include <filesystem>
 #include <string>
@@ -30,3 +31,5 @@ namespace ikk
         std::string m_data;
     };
 }
+
+#endif

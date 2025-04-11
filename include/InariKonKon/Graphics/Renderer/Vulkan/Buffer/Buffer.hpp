@@ -1,4 +1,5 @@
-#pragma once
+#ifndef IKK_BUFFER_HPP
+#define IKK_BUFFER_HPP
 
 #include "InariKonKon/Graphics/Renderer/Vulkan/LogicalDevice.hpp"
 #include "InariKonKon/Graphics/Renderer/Vulkan/CommandBuffer.hpp"
@@ -41,3 +42,5 @@ namespace ikk
 
     void copyBuffer(const Buffer& srcBuffer, Buffer& dstBuffer);
 }
+
+#endif

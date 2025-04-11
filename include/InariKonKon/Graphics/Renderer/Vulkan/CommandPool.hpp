@@ -1,4 +1,5 @@
-#pragma once
+#ifndef IKK_COMMAND_POOL_HPP
+#define IKK_COMMAND_POOL_HPP
 
 #include "InariKonKon/Graphics/Renderer/Vulkan/LogicalDevice.hpp"
 
@@ -20,3 +21,5 @@ namespace ikk
         LogicalDevice* m_logicalDevice = nullptr;
     };
 }
+
+#endif

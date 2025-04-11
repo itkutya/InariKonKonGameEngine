@@ -1,4 +1,5 @@
-#pragma once
+#ifndef IKK_GRAPHICS_PIPELINE_HPP
+#define IKK_GRAPHICS_PIPELINE_HPP
 
 #include "InariKonKon/Graphics/Renderer/Vulkan/Renderpass.hpp"
 
@@ -31,3 +32,5 @@ namespace ikk
         friend class CommandBuffer;
     };
 }
+
+#endif

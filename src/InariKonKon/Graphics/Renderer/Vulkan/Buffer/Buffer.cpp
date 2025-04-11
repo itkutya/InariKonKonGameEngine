@@ -16,7 +16,7 @@ namespace ikk
         this->free();
     }
 
-    void Buffer::create(PhysicalDevice &physicalDevice, const VkDeviceSize size, const VkBufferUsageFlags usage, const VkMemoryPropertyFlags properties)
+    void Buffer::create(PhysicalDevice& physicalDevice, const VkDeviceSize size, const VkBufferUsageFlags usage, const VkMemoryPropertyFlags properties)
     {
         this->m_size = size;
         this->m_usage = usage;

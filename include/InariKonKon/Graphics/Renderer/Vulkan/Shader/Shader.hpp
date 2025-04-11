@@ -1,4 +1,5 @@
-#pragma once
+#ifndef IKK_VULKAN_SHADER_HPP
+#define IKK_VULKAN_SHADER_HPP
 
 #include "InariKonKon/Graphics/Renderer/Vulkan/LogicalDevice.hpp"
 
@@ -24,3 +25,5 @@ namespace ikk
         [[nodiscard]] const VkShaderModule createShaderModule(const Shader& shader) const noexcept;
     };
 }
+
+#endif

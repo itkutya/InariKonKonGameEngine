@@ -1,5 +1,7 @@
 #include "InariKonKon/Application/Window/RenderWindow.hpp"
 
+#include "InariKonKon/Graphics/Renderer/Vulkan.hpp"
+
 namespace ikk
 {
     RenderWindow::RenderWindow(const std::u8string_view title, const std::uint32_t width, const std::uint32_t height, const Engine engine) noexcept

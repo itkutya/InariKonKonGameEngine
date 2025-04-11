@@ -1,4 +1,5 @@
-#pragma once
+#ifndef IKK_COLOR_HPP
+#define IKK_COLOR_HPP
 
 #include <cstdint>
 
@@ -50,3 +51,5 @@ namespace ikk
 	inline constexpr Color Color::Cyan			{ 0.f, 1.f, 1.f };
 	inline constexpr Color Color::Transparent	{ 0.f, 0.f, 0.f, 0.f };
 }
+
+#endif

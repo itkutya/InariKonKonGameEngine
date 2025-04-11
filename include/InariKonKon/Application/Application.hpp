@@ -1,4 +1,5 @@
-#pragma once
+#ifndef IKK_APPLICATION_HPP
+#define IKK_APPLICATION_HPP
 
 #include "InariKonKon/Application/Window/RenderWindow.hpp"
 #include "InariKonKon/Utility/Clock.hpp"
@@ -39,3 +40,5 @@ namespace ikk
         void sleep(const std::uint32_t fps_limit) noexcept;
     };
 }
+
+#endif

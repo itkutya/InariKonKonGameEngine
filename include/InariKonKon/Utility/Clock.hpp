@@ -1,4 +1,5 @@
-#pragma once
+#ifndef IKK_CLOCK_HPP
+#define IKK_CLOCK_HPP
 
 #include "InariKonKon/Utility/Time.hpp"
 
@@ -31,3 +32,5 @@ namespace ikk
 		std::chrono::steady_clock::time_point m_stopPoint{};
 	};
 }
+
+#endif

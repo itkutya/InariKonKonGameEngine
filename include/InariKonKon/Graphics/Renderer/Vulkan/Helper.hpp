@@ -1,4 +1,5 @@
-#pragma once
+#ifndef IKK_VULKAN_HELPER_HPP
+#define IKK_VULKAN_HELPER_HPP
 
 #include <exception>
 
@@ -21,4 +22,6 @@
         } ((void)0)
 #else
     #define VK_CHECK(x) x
+#endif
+
 #endif

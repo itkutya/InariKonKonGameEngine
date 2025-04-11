@@ -1,14 +1,22 @@
-#pragma once
+#ifndef IKK_RENDER_WINDOW_HPP
+#define IKK_RENDER_WINDOW_HPP
 
 #include "InariKonKon/Application/Window/Window.hpp"
 
-//#include "InariKonKon/Graphics/Renderer/RendererBase.hpp"
-//TODO:
-//Remove somehow...
-#include "InariKonKon/Graphics/Renderer/Vulkan.hpp"
+#include "InariKonKon/Graphics/Renderer/RendererBase.hpp"
+#include "InariKonKon/Graphics/Model/Model.hpp"
 
 namespace ikk
 {
+    struct RenderObject
+    {
+        const void* data;
+        std::size_t size;
+        Shader vertexShader;
+        Shader fragmentShader;
+        VertexInfo vertexInfo;
+    };
+
     class RenderWindow : public Window
     {
     public:
@@ -41,15 +49,26 @@ namespace ikk
     template <class VerteciesType, class IndiciesType>
     void RenderWindow::draw(const Model<VerteciesType, IndiciesType>* model) const noexcept
     {
-        //TODO:
-        //Make OpenGL renderer as well...
+        if (model == nullptr)
+            return;
+
         switch (this->m_engine)
         {
         case Engine::None:
             break;
         case Engine::Vulkan:
-            static_cast<Vulkan*>(this->m_renderer.get())->draw(model);
+            RenderObject renderObj =
+            {
+                .data = static_cast<const void*>(&(*model->getVertecies().begin())),
+                .size = model->getVertecies().size() * sizeof(VerteciesType),
+                .vertexShader = model->getVertexShader(),
+                .fragmentShader = model->getFragmentShader(),
+                .vertexInfo = model->getVertexInfo()
+            };
+            this->m_renderer->draw(renderObj);
             break;
         }
     }
 }
+
+#endif

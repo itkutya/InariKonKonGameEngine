@@ -1,4 +1,5 @@
-#pragma once
+#ifndef IKK_MODEL_HPP
+#define IKK_MODEL_HPP
 
 #include <vector>
 #include <array>
@@ -37,10 +38,14 @@ namespace ikk
         Shader m_fragment;
         Shader m_vertex;
         
+        //TODO:
+        //Move this into the shader...
         VertexInfo m_info;
         
         std::vector<VerteciesType> m_vertecies;
         std::vector<IndiciesType> m_indicies;
+
+        friend class RenderWindow;
     };
 
     template <class VerteciesType, class IndiciesType>
@@ -80,6 +85,8 @@ namespace ikk
         return this->m_indicies;
     }
 
+    //TODO:
+    //Move this into the shader...
     template <class VerteciesType, class IndiciesType>
     const VertexInfo Model<VerteciesType, IndiciesType>::createVertexInfo() const noexcept
     {
@@ -106,3 +113,5 @@ namespace ikk
         return temp;
     }
 }
+
+#endif

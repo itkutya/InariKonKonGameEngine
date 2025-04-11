@@ -1,4 +1,5 @@
-#pragma once
+#ifndef IKK_LOGICAL_DEVICE_HPP
+#define IKK_LOGICAL_DEVICE_HPP
 
 #include <optional>
 
@@ -74,3 +75,5 @@ namespace ikk
         void createLogicalDevice(Instance& instance, PhysicalDevice& physicalDevice) noexcept;
     };
 }
+
+#endif

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef IKK_FRAME_SYNC_OBJECTS_HPP
+#define IKK_FRAME_SYNC_OBJECTS_HPP
 
 #include "InariKonKon/Graphics/Renderer/Vulkan/LogicalDevice.hpp"
 
@@ -42,3 +43,5 @@ namespace ikk
         VkFence m_inFlight = VK_NULL_HANDLE;
     };
 }
+
+#endif

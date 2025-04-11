@@ -1,4 +1,5 @@
-#pragma once
+#ifndef IKK_RENDERPASS_HPP
+#define IKK_RENDERPASS_HPP
 
 #include "InariKonKon/Graphics/Renderer/Vulkan/Swapchain.hpp"
 
@@ -27,3 +28,5 @@ namespace ikk
         friend class CommandBuffer;
     };
 }
+
+#endif

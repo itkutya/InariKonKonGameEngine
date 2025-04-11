@@ -10,6 +10,8 @@
 
 #define MAX_FRAMES_IN_FLIGHT 2
 
+#include "InariKonKon/Application/Window/RenderWindow.hpp"
+
 namespace ikk
 {
     Vulkan::Vulkan(std::u8string_view title, GLFWwindow* window, const std::uint32_t width, const std::uint32_t height) noexcept
@@ -64,10 +66,10 @@ namespace ikk
             commandBuffer.setViewport();
             commandBuffer.setScissor();
             
-            for (const auto& obj : this->m_objects.at(&graphicsPipeline))
+            for (const auto& buffers : this->m_renderBuffers)
             {
                 VkDeviceSize offsets[] = { 0 };
-                vkCmdBindVertexBuffers(commandBuffer.getUnderlyingVkType(), 0, 1, &obj.vertexBuffer->getUnderlyingVkType(), offsets);
+                vkCmdBindVertexBuffers(commandBuffer.getUnderlyingVkType(), 0, 1, &buffers.vertexBuffer.getUnderlyingVkType(), offsets);
                 vkCmdDraw(commandBuffer.getUnderlyingVkType(), static_cast<std::uint32_t>(3), 1, 0, 0);
             }
         }
@@ -117,5 +119,24 @@ namespace ikk
         this->m_swapchain.create(U32(width), U32(height), this->m_physicalDevice);
         for (std::size_t i = 0; i < this->m_swapchain.getImageViews().size(); ++i)
             this->m_framebuffers.at(i).create(this->m_swapchain, this->m_renderpass, i);
+    }
+
+    void Vulkan::draw(const RenderObject& renderObj) noexcept
+    {
+        //TODO:
+        //Impl with vulkan stuff...
+        static bool once = true;
+        if (once)
+        {
+            once = false;
+            
+            this->m_graphicsPipelines.emplace_back(this->m_logicalDevice);
+            this->m_graphicsPipelines.front().create(this->m_renderpass, renderObj.fragmentShader, renderObj.vertexShader, renderObj.vertexInfo);
+            
+            this->m_renderBuffers.emplace_back(RenderBuffers{ .vertexBuffer = this->m_logicalDevice, .indexBuffer = this->m_logicalDevice });
+            this->m_renderBuffers.front().vertexBuffer.create(this->m_physicalDevice, renderObj.size,
+                VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+            this->m_renderBuffers.front().vertexBuffer.update(renderObj.data);
+        }
     }
 }

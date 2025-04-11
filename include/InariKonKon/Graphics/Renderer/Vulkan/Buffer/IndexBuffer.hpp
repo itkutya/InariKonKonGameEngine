@@ -1,4 +1,5 @@
-#pragma once
+#ifndef IKK_INDEX_BUFFER_HPP
+#define IKK_INDEX_BUFFER_HPP
 
 #include <vector>
 
@@ -24,3 +25,5 @@ namespace ikk
     private:
     };
 }
+
+#endif

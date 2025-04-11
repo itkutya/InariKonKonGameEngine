@@ -1,4 +1,5 @@
-#pragma once
+#ifndef IKK_INSTANCE_HPP
+#define IKK_INSTANCE_HPP
 
 #include <string_view>
 #include <vector>
@@ -27,3 +28,5 @@ namespace ikk
         [[nodiscard]] static const std::vector<const char*> getRequiredExtensions() noexcept;
     };
 }
+
+#endif

@@ -1,6 +1,5 @@
-#pragma once
-
-#include <unordered_map>
+#ifndef IKK_VULKAN_HPP
+#define IKK_VULKAN_HPP
 
 #include "InariKonKon/Graphics/Renderer/Vulkan/Instance.hpp"
 #include "InariKonKon/Graphics/Renderer/Vulkan/Surface.hpp"
@@ -12,9 +11,7 @@
 #include "InariKonKon/Graphics/Renderer/Vulkan/Framebuffer.hpp"
 #include "InariKonKon/Graphics/Renderer/Vulkan/CommandPool.hpp"
 #include "InariKonKon/Graphics/Renderer/Vulkan/CommandBuffer.hpp"
-
-#include "InariKonKon/Graphics/Renderer/Vulkan/Buffer/VertexBuffer.hpp"
-#include "InariKonKon/Graphics/Renderer/Vulkan/Buffer/IndexBuffer.hpp"
+#include "InariKonKon/Graphics/Renderer/Vulkan/Buffer/Buffer.hpp"
 
 #include "InariKonKon/Graphics/Renderer/RendererBase.hpp"
 
@@ -37,9 +34,6 @@ namespace ikk
 
         void beginRender() override;
         void endRender() override;
-
-        template<class VerteciesType, class IndiciesType = void*>
-        void draw(const Model<VerteciesType, IndiciesType>* model) noexcept;
     private:
         GLFWwindow* m_window;
 
@@ -60,40 +54,17 @@ namespace ikk
         bool m_windowResized = false;
         bool m_renderStarted = false;
 
-        struct RenderBuffer
+        struct RenderBuffers
         {
-            std::shared_ptr<Buffer> vertexBuffer = nullptr;
-            std::shared_ptr<Buffer> indexBuffer = nullptr;
+            Buffer vertexBuffer;
+            Buffer indexBuffer;
         };
-        std::unordered_map<GraphicsPipeline*, std::vector<RenderBuffer>> m_objects;
+        std::vector<RenderBuffers> m_renderBuffers;
 
         void resizeToWindow() noexcept;
+
+        void draw(const RenderObject& renderObj) noexcept override;
     };
-
-    template <class VerteciesType, class IndiciesType>
-    void Vulkan::draw(const Model<VerteciesType, IndiciesType>* model) noexcept
-    {
-        //TODO:
-        //Impl...
-        static bool once = true;
-        if (once)
-        {
-            const auto& vertecies = model->getVertecies();
-            const auto& indicies = model->getIndicies();
-
-            const RenderBuffer& buffer =
-                {
-                    .vertexBuffer = std::make_shared<VertexBuffer<VerteciesType>>(this->m_logicalDevice, this->m_physicalDevice, vertecies),
-                    .indexBuffer = nullptr
-                };
-
-            auto& graphicsPipeline = this->m_graphicsPipelines.emplace_back(this->m_logicalDevice);
-            graphicsPipeline.create(this->m_renderpass, model->getFragmentShader(), model->getVertexShader(), model->getVertexInfo());
-
-            this->m_objects.emplace(std::make_pair(&this->m_graphicsPipelines.front(), std::vector<RenderBuffer>{}));
-            this->m_objects.at(&this->m_graphicsPipelines.front()).emplace_back(buffer);
-
-            once = false;
-        }
-    }
 }
+
+#endif

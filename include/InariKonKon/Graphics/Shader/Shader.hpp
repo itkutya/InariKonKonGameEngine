@@ -1,4 +1,5 @@
-#pragma once
+#ifndef IKK_SHADER_HPP
+#define IKK_SHADER_HPP
 
 #include <vector>
 
@@ -6,6 +7,8 @@
 
 namespace ikk
 {
+    //TODO:
+    //Hash it...
     class Shader final
     {
     public:
@@ -33,3 +36,5 @@ namespace ikk
         TYPE m_type;
     };
 }
+
+#endif

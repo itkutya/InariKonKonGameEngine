@@ -1,4 +1,5 @@
-#pragma once
+#ifndef IKK_PHYSICAL_DEVICE_HPP
+#define IKK_PHYSICAL_DEVICE_HPP
 
 #include <cstdint>
 
@@ -39,3 +40,5 @@ namespace ikk
         [[nodiscard]] VkSampleCountFlagBits getMaxUsableSampleCount() const noexcept;
     };
 }
+
+#endif

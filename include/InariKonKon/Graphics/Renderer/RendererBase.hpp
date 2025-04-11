@@ -1,8 +1,7 @@
-#pragma once
+#ifndef IKK_RENDERER_BASE_HPP
+#define IKK_RENDERER_BASE_HPP
 
 #include <cstdint>
-
-#include "InariKonKon/Graphics/Model/Model.hpp"
 
 namespace ikk
 {
@@ -11,9 +10,12 @@ namespace ikk
         None, Vulkan
     };
 
+    class RenderObject;
+
     class RendererBase
     {
     public:
+        virtual void draw(const RenderObject& renderObj) noexcept = 0;
     protected:
         RendererBase() noexcept = default;
 
@@ -34,3 +36,5 @@ namespace ikk
         friend class RenderWindow;
     };
 }
+
+#endif

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef IKK_VULKAN_TYPE_HPP
+#define IKK_VULKAN_TYPE_HPP
 
 #include <utility>
 
@@ -34,3 +35,5 @@ namespace ikk
         return std::forward<decltype(self)>(self).m_type;
     }
 }
+
+#endif

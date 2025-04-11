@@ -1,4 +1,5 @@
-#pragma once
+#ifndef IKK_FRAMEBUFFER_HPP
+#define IKK_FRAMEBUFFER_HPP
 
 #include "InariKonKon/Graphics/Renderer/Vulkan/Renderpass.hpp"
 
@@ -23,3 +24,5 @@ namespace ikk
         LogicalDevice* m_logicalDevice = nullptr;
     };
 }
+
+#endif

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef IKK_COMMAND_BUFFER_HPP
+#define IKK_COMMAND_BUFFER_HPP
 
 #include "InariKonKon/Graphics/Renderer/Vulkan/GraphicsPipeline.hpp"
 #include "InariKonKon/Graphics/Renderer/Vulkan/CommandPool.hpp"
@@ -33,3 +34,5 @@ namespace ikk
         CommandPool* m_commandPool = nullptr;
     };
 }
+
+#endif

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef IKK_UTILITY_HPP
+#define IKK_UTILITY_HPP
 
 #include <cstdint>
 
@@ -19,3 +20,5 @@
 
 #define TO_UTF8(x)  reinterpret_cast<const char8_t*>(x)
 #define TO_ANSI(x)  reinterpret_cast<const char*>(x)
+
+#endif

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef IKK_SURFACE_HPP
+#define IKK_SURFACE_HPP
 
 #include "InariKonKon/Graphics/Renderer/Vulkan/PhysicalDevice.hpp"
 
@@ -32,3 +33,5 @@ namespace ikk
         std::vector<VkSurfaceFormatKHR> m_surfaceFormats = {};
     };
 }
+
+#endif

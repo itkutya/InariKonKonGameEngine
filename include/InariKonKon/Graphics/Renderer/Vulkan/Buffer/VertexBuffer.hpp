@@ -1,4 +1,5 @@
-#pragma once
+#ifndef IKK_VERTEX_BUFFER_HPP
+#define IKK_VERTEX_BUFFER_HPP
 
 #include "InariKonKon/Graphics/Renderer/Vulkan/Buffer/Buffer.hpp"
 
@@ -40,3 +41,5 @@ namespace ikk
             VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, &commandPool, (const void*)vertecies.data());
     }
 }
+
+#endif

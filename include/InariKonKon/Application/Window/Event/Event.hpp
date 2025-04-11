@@ -1,4 +1,5 @@
-#pragma once
+#ifndef IKK_EVENT_HPP
+#define IKK_EVENT_HPP
 
 #include <cstdint>
 #include <type_traits>
@@ -225,3 +226,5 @@ namespace ikk
             return std::get_if<T>(&this->m_data);
     }
 }
+
+#endif
