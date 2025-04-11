@@ -2,6 +2,8 @@
 
 #include "InariKonKon/Graphics/Renderer/Vulkan/Helper.hpp"
 
+#include "GLFW/glfw3.h"
+
 namespace ikk
 {
     CommandBuffer::CommandBuffer(LogicalDevice& logicalDevice, CommandPool& commandPool) noexcept
@@ -47,27 +49,29 @@ namespace ikk
         graphicspipeline.bind(this->m_type, pipelineBindPoint);
     }
 
-    void CommandBuffer::setViewport() noexcept
+    void CommandBuffer::setViewport(GLFWwindow* window) noexcept
     {
-        //TODO:
-        //FIX
+        int width = 0, height = 0;
+        glfwGetWindowSize(window, &width, &height);
+
         VkViewport viewport{};
         viewport.x = 0.f;
         viewport.y = 0.f;
-        viewport.width = 800.f;
-        viewport.height = 600.f;
+        viewport.width = FLOAT(width);
+        viewport.height = FLOAT(height);
         viewport.minDepth = 0.f;
         viewport.maxDepth = 1.f;
         vkCmdSetViewport(this->m_type, 0, 1, &viewport);
     }
 
-    void CommandBuffer::setScissor() noexcept
+    void CommandBuffer::setScissor(GLFWwindow* window) noexcept
     {
-        //TODO
-        //FIX
+        int width = 0, height = 0;
+        glfwGetWindowSize(window, &width, &height);
+
         VkRect2D scissor{};
         scissor.offset = { 0, 0 };
-        scissor.extent = { 800, 600 };
+        scissor.extent = { U32(width), U32(height) };
         vkCmdSetScissor(this->m_type, 0, 1, &scissor);
     }
 

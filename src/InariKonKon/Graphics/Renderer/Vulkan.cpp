@@ -63,8 +63,8 @@ namespace ikk
         {
             commandBuffer.bindGraphicspipeline(graphicsPipeline, VK_PIPELINE_BIND_POINT_GRAPHICS);
             
-            commandBuffer.setViewport();
-            commandBuffer.setScissor();
+            commandBuffer.setViewport(this->m_window);
+            commandBuffer.setScissor(this->m_window);
             
             for (const auto& buffers : this->m_renderBuffers)
             {

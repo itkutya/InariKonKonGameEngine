@@ -24,8 +24,8 @@ namespace ikk
 
         void bindGraphicspipeline(GraphicsPipeline& graphicspipeline, const VkPipelineBindPoint pipelineBindPoint) noexcept;
         
-        void setViewport() noexcept;
-        void setScissor() noexcept;
+        void setViewport(GLFWwindow* window) noexcept;
+        void setScissor(GLFWwindow* window) noexcept;
         
         void endRecording() noexcept;
         void endRenderpass(Renderpass& renderpass) noexcept;
