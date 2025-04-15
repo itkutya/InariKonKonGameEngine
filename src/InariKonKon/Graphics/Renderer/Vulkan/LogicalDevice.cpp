@@ -10,7 +10,6 @@ namespace ikk
     {
         this->createQueueIndices(physicalDevice, surface);
         this->createLogicalDevice(instance, physicalDevice);
-
         DEBUG_LOG("Vulkan logical device created.", Log::INFO, Log::ALL);
     }
 

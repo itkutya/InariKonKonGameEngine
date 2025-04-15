@@ -4,8 +4,21 @@
 
 namespace ikk
 {
+    [[nodiscard]] std::shared_ptr<RendererBase> createRenderer(const std::u8string_view title, GLFWwindow* window,
+        const std::uint32_t width, const std::uint32_t height, const Engine engine) noexcept
+    {
+        switch (engine)
+        {
+        case Engine::None:
+            return nullptr;
+        case Engine::Vulkan:
+            return std::make_shared<Vulkan>(title, window, width, height);
+        }
+        return nullptr;
+    }
+
     RenderWindow::RenderWindow(const std::u8string_view title, const std::uint32_t width, const std::uint32_t height, const Engine engine) noexcept
-        : Window(title, width, height), m_renderer(createRenderer(title, width, height, engine)), m_engine(engine)
+        : Window(title, width, height), m_renderer(createRenderer(title, m_window, width, height, engine)), m_engine(engine)
     {
     }
 
@@ -22,17 +35,5 @@ namespace ikk
     std::shared_ptr<RendererBase>& RenderWindow::getRenderer() noexcept
     {
         return this->m_renderer;
-    }
-
-    std::shared_ptr<RendererBase> RenderWindow::createRenderer(const std::u8string_view title, const std::uint32_t width, const std::uint32_t height, const Engine engine) const noexcept
-    {
-        switch (engine)
-        {
-        case Engine::None:
-            return nullptr;
-        case Engine::Vulkan:
-            return std::make_shared<Vulkan>(title, m_window, width, height);
-        }
-        return nullptr;
     }
 }

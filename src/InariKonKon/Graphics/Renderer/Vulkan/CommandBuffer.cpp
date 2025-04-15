@@ -16,7 +16,6 @@ namespace ikk
         allocInfo.commandBufferCount = 1U;
 
         VK_CHECK(vkAllocateCommandBuffers(this->m_logicalDevice->getUnderlyingVkType(), &allocInfo, &this->m_type));
-
         DEBUG_LOG("Vulkan command buffer created.", Log::INFO, Log::ALL);
     }
 

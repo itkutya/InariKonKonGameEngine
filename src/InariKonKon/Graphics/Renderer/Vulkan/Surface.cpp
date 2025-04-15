@@ -10,7 +10,6 @@ namespace ikk
     Surface::Surface(Instance& instance, GLFWwindow* window) noexcept : m_instance(&instance), m_window(window)
     {
         VK_CHECK(glfwCreateWindowSurface(this->m_instance->getUnderlyingVkType(), this->m_window, nullptr, &this->m_type));
-
         DEBUG_LOG("Vulkan surface created.", Log::INFO, Log::ALL);
     }
 

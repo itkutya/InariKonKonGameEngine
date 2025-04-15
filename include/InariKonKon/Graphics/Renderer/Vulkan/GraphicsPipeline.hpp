@@ -3,15 +3,16 @@
 
 #include "InariKonKon/Graphics/Renderer/Vulkan/Renderpass.hpp"
 
-#include "InariKonKon/Graphics/Renderer/Vulkan/Shader/Shader.hpp"
 #include "InariKonKon/Graphics/Model/Model.hpp"
 
 namespace ikk
 {
+    class Shader;
+
     class GraphicsPipeline final : public VkType<VkPipeline>
     {
     public:
-        GraphicsPipeline(LogicalDevice& logicalDevice) noexcept;
+        GraphicsPipeline(LogicalDevice& logicalDevice, Renderpass& renderpass, const Shader& fragment, const Shader& vertex) noexcept;
 
         ~GraphicsPipeline() noexcept;
 
@@ -20,8 +21,6 @@ namespace ikk
 
         GraphicsPipeline& operator=(const GraphicsPipeline&) noexcept = default;
         GraphicsPipeline& operator=(GraphicsPipeline&&) noexcept = default;
-        
-        void create(Renderpass& renderpass, const Shader& fragment, const Shader& vertex, const VertexInfo& info) noexcept;
     protected:
         void bind(VkCommandBuffer& commandBuffer, const VkPipelineBindPoint pipelineBindPoint) noexcept;
     private:

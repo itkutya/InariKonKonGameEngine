@@ -12,9 +12,8 @@ namespace ikk
     {
         const void* data;
         std::size_t size;
-        Shader vertexShader;
-        Shader fragmentShader;
-        VertexInfo vertexInfo;
+        const Shader* vertexShader;
+        const Shader* fragmentShader;
     };
 
     class RenderWindow : public Window
@@ -30,7 +29,7 @@ namespace ikk
         RenderWindow& operator=(const RenderWindow&) noexcept = default;
         RenderWindow& operator=(RenderWindow&&) noexcept = default;
 
-        template<class VerteciesType, class IndiciesType = void*>
+        template<class VerteciesType, class IndiciesType>
         void draw(const Model<VerteciesType, IndiciesType>* model) const noexcept;
     protected:
         void onResize([[maybe_unused]] const std::uint32_t width, [[maybe_unused]] const std::uint32_t height) noexcept override;
@@ -41,8 +40,6 @@ namespace ikk
         const std::shared_ptr<RendererBase>& getRenderer() const noexcept;
         std::shared_ptr<RendererBase>& getRenderer() noexcept;
 
-        std::shared_ptr<RendererBase> createRenderer(const std::u8string_view title, const std::uint32_t width, const std::uint32_t height, const Engine engine) const noexcept;
-
         friend class Application;
     };
 
@@ -51,21 +48,23 @@ namespace ikk
     {
         if (model == nullptr)
             return;
+        
+        if (model->getVertecies().size() == 0)
+            return;
 
         switch (this->m_engine)
         {
         case Engine::None:
             break;
         case Engine::Vulkan:
-            RenderObject renderObj =
-            {
-                .data = static_cast<const void*>(&(*model->getVertecies().begin())),
-                .size = model->getVertecies().size() * sizeof(VerteciesType),
-                .vertexShader = model->getVertexShader(),
-                .fragmentShader = model->getFragmentShader(),
-                .vertexInfo = model->getVertexInfo()
-            };
-            this->m_renderer->draw(renderObj);
+            RenderObject obj =
+                {
+                    .data = static_cast<const void*>(&model->getVertecies().at(0)),
+                    .size = model->getVertecies().size() * sizeof(VerteciesType),
+                    .vertexShader = &model->getVertexShader(),
+                    .fragmentShader = &model->getFragmentShader(),
+                };
+            this->m_renderer->draw(obj);
             break;
         }
     }

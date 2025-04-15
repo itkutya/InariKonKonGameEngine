@@ -2,28 +2,15 @@
 
 #include "InariKonKon/Graphics/Renderer/Vulkan/Helper.hpp"
 
+#include "InariKonKon/Graphics/Renderer/Vulkan/Shader/VkShader.hpp"
+
 namespace ikk
 {
-    GraphicsPipeline::GraphicsPipeline(LogicalDevice& logicalDevice) noexcept : m_logicalDevice(&logicalDevice)
+    GraphicsPipeline::GraphicsPipeline(LogicalDevice& logicalDevice, Renderpass& renderpass, const Shader& fragment, const Shader& vertex) noexcept
+        : m_logicalDevice(&logicalDevice)
     {
-    }
-    
-    GraphicsPipeline::~GraphicsPipeline() noexcept
-    {
-        vkDestroyPipeline(this->m_logicalDevice->getUnderlyingVkType(), this->m_type, nullptr);
-        vkDestroyPipelineLayout(this->m_logicalDevice->getUnderlyingVkType(), this->m_pipelineLayout, nullptr);
-        DEBUG_LOG("Vulkan graphics pipeline destroyed.", Log::INFO, Log::ALL);
-    }
-    
-    void GraphicsPipeline::bind(VkCommandBuffer &commandBuffer, const VkPipelineBindPoint pipelineBindPoint) noexcept
-    {
-        vkCmdBindPipeline(commandBuffer, pipelineBindPoint, this->m_type);
-    }
-
-    void GraphicsPipeline::create(Renderpass& renderpass, const Shader& fragment, const Shader& vertex, const VertexInfo& info) noexcept
-    {
-        VulkanShader VkFragmentShader { *this->m_logicalDevice, fragment };
-        VulkanShader VkVertexShader { *this->m_logicalDevice, vertex };
+        VkShader VkFragmentShader { *this->m_logicalDevice, fragment };
+        VkShader VkVertexShader { *this->m_logicalDevice, vertex };
 
         VkPipelineShaderStageCreateInfo vertShaderStageInfo{};
         vertShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
@@ -39,7 +26,10 @@ namespace ikk
 
         VkPipelineShaderStageCreateInfo shaderStages[] = { vertShaderStageInfo, fragShaderStageInfo };
 
-        const auto bindingDescription = [](const VertexInfo& info) noexcept
+        const Shader::VertexInfo info = vertex.createVertexInfo();
+        //TODO:
+        //Own func (?)
+        const auto bindingDescription = [](const Shader::VertexInfo& info) noexcept
         {
             VkVertexInputBindingDescription bindingDescription{};
             bindingDescription.binding = info.binding;
@@ -47,17 +37,17 @@ namespace ikk
             bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
             switch (info.inputRate)
             {
-            case VertexInfo::InputRate::Per_Vertex:
+            case Shader::VertexInfo::InputRate::Per_Vertex:
                 bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
                 break;
-            case VertexInfo::InputRate::Per_Instance:
+            case Shader::VertexInfo::InputRate::Per_Instance:
                 bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_INSTANCE;
                 break;
             }
             return bindingDescription;
         }(info);
 
-        const auto attributeDescriptions = [](const VertexInfo& info) noexcept
+        const auto attributeDescriptions = [](const Shader::VertexInfo& info) noexcept
         {
             std::vector<VkVertexInputAttributeDescription> attributeDescriptions{ info.attributes.size() };
 
@@ -68,16 +58,16 @@ namespace ikk
 
                 switch (info.attributes.at(i).format)
                 {
-                case VertexAttributes::Format::Float:
+                case Shader::VertexAttributes::Format::Float:
                     attributeDescriptions[i].format = VK_FORMAT_R32_SFLOAT;
                     break;
-                case VertexAttributes::Format::Vec2:
+                case Shader::VertexAttributes::Format::Vec2:
                     attributeDescriptions[i].format = VK_FORMAT_R32G32_SFLOAT;
                     break;
-                case VertexAttributes::Format::Vec3:
+                case Shader::VertexAttributes::Format::Vec3:
                     attributeDescriptions[i].format = VK_FORMAT_R32G32B32_SFLOAT;
                     break;
-                case VertexAttributes::Format::Vec4:
+                case Shader::VertexAttributes::Format::Vec4:
                     attributeDescriptions[i].format = VK_FORMAT_R32G32B32A32_SFLOAT;
                     break;
                 }
@@ -97,7 +87,7 @@ namespace ikk
 
         VkPipelineInputAssemblyStateCreateInfo inputAssembly{};
         inputAssembly.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
-        inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
+        inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP;
         inputAssembly.primitiveRestartEnable = VK_FALSE;
 
         VkPipelineViewportStateCreateInfo viewportState{};
@@ -170,7 +160,18 @@ namespace ikk
         pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
 
         VK_CHECK(vkCreateGraphicsPipelines(this->m_logicalDevice->getUnderlyingVkType(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &this->m_type));
-
         DEBUG_LOG("Vulkan graphics pipeline created.", Log::INFO, Log::ALL);
+    }
+    
+    GraphicsPipeline::~GraphicsPipeline() noexcept
+    {
+        vkDestroyPipeline(this->m_logicalDevice->getUnderlyingVkType(), this->m_type, nullptr);
+        vkDestroyPipelineLayout(this->m_logicalDevice->getUnderlyingVkType(), this->m_pipelineLayout, nullptr);
+        DEBUG_LOG("Vulkan graphics pipeline destroyed.", Log::INFO, Log::ALL);
+    }
+    
+    void GraphicsPipeline::bind(VkCommandBuffer &commandBuffer, const VkPipelineBindPoint pipelineBindPoint) noexcept
+    {
+        vkCmdBindPipeline(commandBuffer, pipelineBindPoint, this->m_type);
     }
 }

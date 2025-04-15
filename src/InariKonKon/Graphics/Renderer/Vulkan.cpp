@@ -14,7 +14,7 @@
 
 namespace ikk
 {
-    Vulkan::Vulkan(std::u8string_view title, GLFWwindow* window, const std::uint32_t width, const std::uint32_t height) noexcept
+    Vulkan::Vulkan(const std::u8string_view title, GLFWwindow* window, const std::uint32_t width, const std::uint32_t height) noexcept
         :   m_window(window),
             m_instance(title),
             m_surface(m_instance, m_window),
@@ -66,11 +66,15 @@ namespace ikk
             commandBuffer.setViewport(this->m_window);
             commandBuffer.setScissor(this->m_window);
             
+            //TODO:
+            //Check which buffer belongs to the pipeline somehow...
             for (const auto& buffers : this->m_renderBuffers)
             {
                 VkDeviceSize offsets[] = { 0 };
                 vkCmdBindVertexBuffers(commandBuffer.getUnderlyingVkType(), 0, 1, &buffers.vertexBuffer.getUnderlyingVkType(), offsets);
-                vkCmdDraw(commandBuffer.getUnderlyingVkType(), static_cast<std::uint32_t>(3), 1, 0, 0);
+                //TODO:
+                //Save the size somehow...
+                vkCmdDraw(commandBuffer.getUnderlyingVkType(), static_cast<std::uint32_t>(4), 1, 0, 0);
             }
         }
     }
@@ -97,6 +101,29 @@ namespace ikk
         this->m_currentFrame = (this->m_currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
     }
 
+    void Vulkan::draw(const RenderObject& renderObj) noexcept
+    {
+        //TODO:
+        //Impl with vulkan stuff...
+        static bool once = true;
+        if (once)
+        {
+            once = false;
+            
+            this->m_graphicsPipelines.emplace_back(this->m_logicalDevice, this->m_renderpass, *renderObj.fragmentShader, *renderObj.vertexShader);
+            
+            //TODO:
+            //Use the appropriate VkBuffer type...
+            this->m_renderBuffers.emplace_back(RenderBuffers{ .vertexBuffer = this->m_logicalDevice, .indexBuffer = this->m_logicalDevice });
+            this->m_renderBuffers.back().vertexBuffer.create(this->m_physicalDevice, renderObj.size,
+                VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+            this->m_renderBuffers.back().vertexBuffer.update(renderObj.data);
+        }
+        //TODO:
+        //Hashed shader id --> if does not exist --> add to graphicspipeline & add obj
+        //if it exist just add the object if it does not already exists
+    }
+
     void Vulkan::resizeToWindow() noexcept
     {
         int width = 0, height = 0;
@@ -119,24 +146,5 @@ namespace ikk
         this->m_swapchain.create(U32(width), U32(height), this->m_physicalDevice);
         for (std::size_t i = 0; i < this->m_swapchain.getImageViews().size(); ++i)
             this->m_framebuffers.at(i).create(this->m_swapchain, this->m_renderpass, i);
-    }
-
-    void Vulkan::draw(const RenderObject& renderObj) noexcept
-    {
-        //TODO:
-        //Impl with vulkan stuff...
-        static bool once = true;
-        if (once)
-        {
-            once = false;
-            
-            this->m_graphicsPipelines.emplace_back(this->m_logicalDevice);
-            this->m_graphicsPipelines.front().create(this->m_renderpass, renderObj.fragmentShader, renderObj.vertexShader, renderObj.vertexInfo);
-            
-            this->m_renderBuffers.emplace_back(RenderBuffers{ .vertexBuffer = this->m_logicalDevice, .indexBuffer = this->m_logicalDevice });
-            this->m_renderBuffers.front().vertexBuffer.create(this->m_physicalDevice, renderObj.size,
-                VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-            this->m_renderBuffers.front().vertexBuffer.update(renderObj.data);
-        }
     }
 }

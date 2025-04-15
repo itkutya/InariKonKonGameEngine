@@ -20,7 +20,7 @@ namespace ikk
     class Vulkan final : public RendererBase
     {
     public:
-        Vulkan(std::u8string_view title, GLFWwindow* window, const std::uint32_t width, const std::uint32_t height) noexcept;
+        Vulkan(const std::u8string_view title, GLFWwindow* window, const std::uint32_t width, const std::uint32_t height) noexcept;
 
         ~Vulkan() noexcept = default;
 
@@ -34,6 +34,8 @@ namespace ikk
 
         void beginRender() override;
         void endRender() override;
+
+        void draw(const RenderObject& renderObj) noexcept override;
     private:
         GLFWwindow* m_window;
 
@@ -62,8 +64,6 @@ namespace ikk
         std::vector<RenderBuffers> m_renderBuffers;
 
         void resizeToWindow() noexcept;
-
-        void draw(const RenderObject& renderObj) noexcept override;
     };
 }
 

@@ -10,7 +10,7 @@ namespace ikk
         None, Vulkan
     };
 
-    class RenderObject;
+    struct RenderObject;
 
     class RendererBase
     {

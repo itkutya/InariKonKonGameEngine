@@ -12,6 +12,7 @@ namespace ikk
     {
     public:
         VkType() noexcept = default;
+        explicit VkType(T&& type) noexcept;
 
         virtual ~VkType() noexcept = default;
 
@@ -27,6 +28,11 @@ namespace ikk
         T m_type = VK_NULL_HANDLE;
     private:
     };
+
+    template<class T>
+    VkType<T>::VkType(T&& type) noexcept : m_type(std::move(type))
+    {
+    }
 
     template<class T>
     template<class Self>
