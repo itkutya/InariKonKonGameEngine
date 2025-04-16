@@ -10,7 +10,7 @@
 namespace ikk
 {
     //TODO:
-    //Place these somewhere else...
+    //Place these somewhere else... or just dont inline it...
     struct ExternalLibraries
     {
         ExternalLibraries()
