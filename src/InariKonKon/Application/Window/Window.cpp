@@ -44,12 +44,6 @@ namespace ikk
 
     GLFWwindow* Window::createWindow(const std::u8string_view title, const std::uint32_t width, const std::uint32_t height)
     {
-        if (!glfwInit())
-        {
-            Log("Cannot initialize GLFW.\nExiting ...", Log::FATAL, Log::ALL);
-            throw std::runtime_error("Cannot initialize GLFW.");
-        }
-
         glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
         return glfwCreateWindow(INT(width), INT(height), TO_ANSI(title.data()), NULL, NULL);
     }

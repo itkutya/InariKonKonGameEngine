@@ -9,16 +9,30 @@
 
 namespace ikk
 {
+    //TODO:
+    //Place these somewhere else...
+    struct ExternalLibraries
+    {
+        ExternalLibraries()
+        {
+            glfwInitHint(GLFW_WAYLAND_LIBDECOR, GLFW_WAYLAND_DISABLE_LIBDECOR);
+            if (!glfwInit())
+            {
+                Log("Cannot initialize GLFW.\nExiting ...", Log::FATAL, Log::ALL);
+                throw std::runtime_error("Cannot initialize GLFW.");
+            }
+        }
+
+        ~ExternalLibraries() noexcept
+        {
+            glfwTerminate();
+        }
+    };
+    inline static ExternalLibraries libs{};
+
     Application::Application(std::u8string_view title, const std::uint32_t width, const std::uint32_t height, const Engine engine) noexcept
         : m_window(title, width, height, engine), m_clock({})
     {
-        DEBUG_LOG("Application created.", Log::INFO, Log::ALL);
-    }
-
-    Application::~Application() noexcept
-    {
-        glfwTerminate();
-        DEBUG_LOG("Application destroyed.", Log::INFO, Log::ALL);
     }
 
     void Application::run() noexcept

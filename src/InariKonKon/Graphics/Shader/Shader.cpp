@@ -118,6 +118,20 @@ namespace ikk
             vertexAttribute.location = temp_location++;
             //TODO:
             //Calculate this somehow...
+            /*
+            https://vkguide.dev/docs/chapter-4/descriptors_code_more/
+            
+            size_t VulkanEngine::pad_uniform_buffer_size(size_t originalSize)
+            {
+                // Calculate required alignment based on minimum device offset alignment
+                size_t minUboAlignment = _gpuProperties.limits.minUniformBufferOffsetAlignment;
+                size_t alignedSize = originalSize;
+                if (minUboAlignment > 0) {
+                    alignedSize = (alignedSize + minUboAlignment - 1) & ~(minUboAlignment - 1);
+                }
+                return alignedSize;
+            }
+            */
             static std::size_t temp_offset = 0;
             if (i == 0)
                 vertexAttribute.offset = 0;

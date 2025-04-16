@@ -14,7 +14,7 @@ namespace ikk
         //Application(std::u8string_view title) noexcept;
         Application(std::u8string_view title, const std::uint32_t width, const std::uint32_t height, const Engine engine) noexcept;
 
-        virtual ~Application() noexcept;
+        virtual ~Application() noexcept = default;
 
         Application(const Application&) noexcept = default;
         Application(Application&&) noexcept = default;
