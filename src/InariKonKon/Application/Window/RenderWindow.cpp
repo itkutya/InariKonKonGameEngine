@@ -27,7 +27,7 @@ namespace ikk
         this->m_renderer->onResize(width, height);
     }
 
-    const std::shared_ptr<RendererBase> &RenderWindow::getRenderer() const noexcept
+    const std::shared_ptr<RendererBase>& RenderWindow::getRenderer() const noexcept
     {
         return this->m_renderer;
     }

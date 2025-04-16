@@ -16,7 +16,7 @@ namespace ikk
     public:
         Window(std::u8string_view title, const std::uint32_t width, const std::uint32_t height);
 
-        ~Window() noexcept;
+        virtual ~Window() noexcept;
 
         Window(const Window&) noexcept = default;
         Window(Window&&) noexcept = default;

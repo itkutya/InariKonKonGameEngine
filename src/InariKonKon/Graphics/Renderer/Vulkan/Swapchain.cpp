@@ -104,7 +104,7 @@ namespace ikk
 
     void Swapchain::destroy() noexcept
     {
-        for (const VkImageView &imageView : this->m_imageViews)
+        for (const VkImageView& imageView : this->m_imageViews)
 		    vkDestroyImageView(this->m_logicalDevice->getUnderlyingVkType(), imageView, nullptr);
 
         vkDestroySwapchainKHR(this->m_logicalDevice->getUnderlyingVkType(), this->m_type, nullptr);

@@ -25,7 +25,6 @@ namespace ikk
     Window::~Window() noexcept
     {
         glfwDestroyWindow(this->m_window);
-
         DEBUG_LOG(fmt::format("{} (window) destroyed.", TO_ANSI(this->m_title.data())), Log::INFO, Log::ALL);
     }
 
@@ -43,7 +42,7 @@ namespace ikk
     {
     }
 
-    GLFWwindow *Window::createWindow(const std::u8string_view title, const std::uint32_t width, const std::uint32_t height)
+    GLFWwindow* Window::createWindow(const std::u8string_view title, const std::uint32_t width, const std::uint32_t height)
     {
         if (!glfwInit())
         {
@@ -57,6 +56,11 @@ namespace ikk
 
     void Window::setupWindowCallbacks() noexcept
     {
+        static auto error_callback = [](int code, const char* description) noexcept
+        {
+            Log(std::format("{}: {}\n", code, description), ikk::Log::ERROR);
+        };
+        glfwSetErrorCallback(error_callback);
         //TODO:
         //Impl. the rest...
 
