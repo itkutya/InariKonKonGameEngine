@@ -3,8 +3,6 @@
 
 #include "InariKonKon/Graphics/Renderer/Vulkan/Renderpass.hpp"
 
-#include "InariKonKon/Graphics/Model/Model.hpp"
-
 namespace ikk
 {
     class Shader;

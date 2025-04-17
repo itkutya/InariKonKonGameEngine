@@ -26,10 +26,10 @@ namespace ikk
 
         VkPipelineShaderStageCreateInfo shaderStages[] = { vertShaderStageInfo, fragShaderStageInfo };
 
-        const Shader::VertexInfo info = vertex.createVertexInfo();
+        const VkShader::VertexInfo info = VkVertexShader.createVertexInfo();
         //TODO:
         //Own func (?)
-        const auto bindingDescription = [](const Shader::VertexInfo& info) noexcept
+        const auto bindingDescription = [](const VkShader::VertexInfo& info) noexcept
         {
             VkVertexInputBindingDescription bindingDescription{};
             bindingDescription.binding = info.binding;
@@ -37,17 +37,17 @@ namespace ikk
             bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
             switch (info.inputRate)
             {
-            case Shader::VertexInfo::InputRate::Per_Vertex:
+            case VkShader::VertexInfo::InputRate::Per_Vertex:
                 bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
                 break;
-            case Shader::VertexInfo::InputRate::Per_Instance:
+            case VkShader::VertexInfo::InputRate::Per_Instance:
                 bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_INSTANCE;
                 break;
             }
             return bindingDescription;
         }(info);
 
-        const auto attributeDescriptions = [](const Shader::VertexInfo& info) noexcept
+        const auto attributeDescriptions = [](const VkShader::VertexInfo& info) noexcept
         {
             std::vector<VkVertexInputAttributeDescription> attributeDescriptions{ info.attributes.size() };
 
@@ -58,20 +58,20 @@ namespace ikk
 
                 switch (info.attributes.at(i).format)
                 {
-                case Shader::VertexAttributes::Format::Float:
+                case VkShader::VertexAttributes::Format::Float:
                     attributeDescriptions[i].format = VK_FORMAT_R32_SFLOAT;
                     break;
-                case Shader::VertexAttributes::Format::Vec2:
+                case VkShader::VertexAttributes::Format::Vec2:
                     attributeDescriptions[i].format = VK_FORMAT_R32G32_SFLOAT;
                     break;
-                case Shader::VertexAttributes::Format::Vec3:
+                case VkShader::VertexAttributes::Format::Vec3:
                     attributeDescriptions[i].format = VK_FORMAT_R32G32B32_SFLOAT;
                     break;
-                case Shader::VertexAttributes::Format::Vec4:
+                case VkShader::VertexAttributes::Format::Vec4:
                     attributeDescriptions[i].format = VK_FORMAT_R32G32B32A32_SFLOAT;
                     break;
                 }
-                    
+                
                 attributeDescriptions[i].offset = info.attributes.at(i).offset;
             }
 
