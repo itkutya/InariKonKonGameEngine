@@ -5,6 +5,8 @@
 #include <cstdint>
 #include <chrono>
 
+#include "InariKonKon/Utility/Utility.hpp"
+
 namespace ikk
 {
 	class Time final
@@ -41,17 +43,17 @@ namespace ikk
 
 	constexpr float Time::asSeconds() const noexcept
 	{
-		return static_cast<float>(this->m_value.count() / 1000000.f);
+		return FLOAT(this->m_value.count() / 1000000.f);
 	}
 
 	constexpr std::int32_t Time::asMilliseconds() const noexcept
 	{
-		return static_cast<std::int32_t>(this->m_value.count() / 1000u);
+		return I32(this->m_value.count() / 1000u);
 	}
 
 	constexpr std::int64_t Time::asMicroseconds() const noexcept
 	{
-		return static_cast<std::int64_t>(this->m_value.count());
+		return I64(this->m_value.count());
 	}
 
 	constexpr std::chrono::microseconds Time::toDuration() const noexcept

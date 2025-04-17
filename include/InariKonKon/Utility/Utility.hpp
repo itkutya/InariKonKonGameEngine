@@ -14,6 +14,11 @@
 #define U16(x)      static_cast<std::uint16_t>(x)
 #define U8(x)       static_cast<std::uint8_t>(x)
 
+#define I64(x)      static_cast<std::int64_t>(x)
+#define I32(x)      static_cast<std::int32_t>(x)
+#define I16(x)      static_cast<std::int16_t>(x)
+#define I8(x)       static_cast<std::int8_t>(x)
+
 #define INT(x)      static_cast<std::int32_t>(x)
 #define BOOL(x)     static_cast<bool>(x)
 #define FLOAT(x)    static_cast<float>(x) 

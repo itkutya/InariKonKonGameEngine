@@ -39,7 +39,7 @@ namespace ikk
         //TODO:
         //Sharing mode is ignored couse it is VK_SHARING_MODE_EXCLUSIVE
         bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-        bufferInfo.queueFamilyIndexCount = static_cast<std::uint32_t>(queueFamilies.size());
+        bufferInfo.queueFamilyIndexCount = U32(queueFamilies.size());
         bufferInfo.pQueueFamilyIndices = queueFamilies.data();
 
         VK_CHECK(vkCreateBuffer(this->m_logicalDevice->getUnderlyingVkType(), &bufferInfo, nullptr, &this->m_type));

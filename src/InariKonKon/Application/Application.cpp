@@ -2,6 +2,8 @@
 
 #include <thread>
 
+#include "InariKonKon/Utility/Utility.hpp"
+
 namespace ikk
 {
     Application::Application(std::u8string_view title, const std::uint32_t width, const std::uint32_t height, const Engine engine) noexcept
@@ -46,7 +48,7 @@ namespace ikk
     {
         if (fps_limit > 0)
         {
-            const Time targetFPS = microseconds(static_cast<std::uint64_t>(1000000U / fps_limit));
+            const Time targetFPS = microseconds(U64(1000000U / fps_limit));
             std::this_thread::sleep_for(targetFPS.toDuration());
         }
         this->m_deltaTime = this->m_clock.restart();

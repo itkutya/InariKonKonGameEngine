@@ -8,9 +8,9 @@
 
 #include "InariKonKon/Graphics/Renderer/Vulkan/Helper.hpp"
 
-#define MAX_FRAMES_IN_FLIGHT 2
-
 #include "InariKonKon/Application/Window/RenderWindow.hpp"
+
+#define MAX_FRAMES_IN_FLIGHT 2
 
 namespace ikk
 {
@@ -74,7 +74,7 @@ namespace ikk
                 vkCmdBindVertexBuffers(commandBuffer.getUnderlyingVkType(), 0, 1, &buffers.vertexBuffer.getUnderlyingVkType(), offsets);
                 //TODO:
                 //Save the size somehow...
-                vkCmdDraw(commandBuffer.getUnderlyingVkType(), static_cast<std::uint32_t>(4), 1, 0, 0);
+                vkCmdDraw(commandBuffer.getUnderlyingVkType(), U32(3), 1, 0, 0);
             }
         }
     }
