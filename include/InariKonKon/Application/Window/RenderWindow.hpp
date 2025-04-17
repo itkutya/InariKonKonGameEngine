@@ -43,7 +43,7 @@ namespace ikk
         friend class Application;
     };
 
-    template <class VerteciesType, class IndiciesType>
+    template<class VerteciesType, class IndiciesType>
     void RenderWindow::draw(const Model<VerteciesType, IndiciesType>* model) const noexcept
     {
         if (model == nullptr)

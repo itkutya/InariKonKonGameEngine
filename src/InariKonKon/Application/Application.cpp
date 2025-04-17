@@ -2,34 +2,8 @@
 
 #include <thread>
 
-#define GLFW_INCLUDE_VULKAN
-#include "GLFW/glfw3.h"
-
-#include "InariKonKon/Utility/Log.hpp"
-
 namespace ikk
 {
-    //TODO:
-    //Place these somewhere else... or just dont inline it...
-    struct ExternalLibraries
-    {
-        ExternalLibraries()
-        {
-            glfwInitHint(GLFW_WAYLAND_LIBDECOR, GLFW_WAYLAND_DISABLE_LIBDECOR);
-            if (!glfwInit())
-            {
-                Log("Cannot initialize GLFW.\nExiting ...", Log::FATAL, Log::ALL);
-                throw std::runtime_error("Cannot initialize GLFW.");
-            }
-        }
-
-        ~ExternalLibraries() noexcept
-        {
-            glfwTerminate();
-        }
-    };
-    inline static ExternalLibraries libs{};
-
     Application::Application(std::u8string_view title, const std::uint32_t width, const std::uint32_t height, const Engine engine) noexcept
         : m_window(title, width, height, engine), m_clock({})
     {
@@ -73,8 +47,6 @@ namespace ikk
         if (fps_limit > 0)
         {
             const Time targetFPS = microseconds(static_cast<std::uint64_t>(1000000U / fps_limit));
-            //TODO:
-            //Make sure it does not block other threads...
             std::this_thread::sleep_for(targetFPS.toDuration());
         }
         this->m_deltaTime = this->m_clock.restart();

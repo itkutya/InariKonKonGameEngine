@@ -33,32 +33,32 @@ namespace ikk
         std::vector<IndiciesType> m_indicies;
     };
 
-    template <class VerteciesType, class IndiciesType>
+    template<class VerteciesType, class IndiciesType>
     Model<VerteciesType, IndiciesType>::Model(const Shader& fragment, const Shader& vertex,
                             const std::vector<VerteciesType>& vertecies, const std::vector<IndiciesType>& indicies) noexcept
         : m_fragment(fragment), m_vertex(vertex), m_vertecies(vertecies), m_indicies(indicies)
     {
     }
 
-    template <class VerteciesType, class IndiciesType>
+    template<class VerteciesType, class IndiciesType>
     const Shader& Model<VerteciesType, IndiciesType>::getFragmentShader() const noexcept
     {
         return this->m_fragment;
     }
     
-    template <class VerteciesType, class IndiciesType>
+    template<class VerteciesType, class IndiciesType>
     const Shader& Model<VerteciesType, IndiciesType>::getVertexShader() const noexcept
     {
         return this->m_vertex;
     }
 
-    template <class VerteciesType, class IndiciesType>
+    template<class VerteciesType, class IndiciesType>
     const std::vector<VerteciesType>& Model<VerteciesType, IndiciesType>::getVertecies() const noexcept
     {
         return this->m_vertecies;
     }
 
-    template <class VerteciesType, class IndiciesType>
+    template<class VerteciesType, class IndiciesType>
     const std::vector<IndiciesType>& Model<VerteciesType, IndiciesType>::getIndicies() const noexcept
     {
         return this->m_indicies;

@@ -11,7 +11,7 @@ namespace ikk
 	{
 	public:
 		constexpr Time() noexcept = default;
-		template <typename Rep, typename Period>
+		template<typename Rep, typename Period>
 		explicit constexpr Time(const std::chrono::duration<Rep, Period>& duration) noexcept;
 
 		constexpr ~Time() noexcept = default;
@@ -33,7 +33,7 @@ namespace ikk
 		std::chrono::microseconds m_value{};
 	};
 
-	template <typename Rep, typename Period>
+	template<typename Rep, typename Period>
 	constexpr Time::Time(const std::chrono::duration<Rep, Period>& duration) noexcept
 		: m_value(std::chrono::duration_cast<std::chrono::microseconds>(duration))
 	{

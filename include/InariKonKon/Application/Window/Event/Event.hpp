@@ -127,22 +127,22 @@ namespace ikk
             std::uint32_t joystickId{};
         };
 
-        template <class T>
+        template<class T>
         Event(const T& type) noexcept;
 
-        template <class T>
+        template<class T>
         [[nodiscard]] const bool is() const noexcept;
 
-        template <class T>
+        template<class T>
         [[nodiscard]] T& get() noexcept;
 
-        template <class T>
+        template<class T>
         [[nodiscard]] const T& get() const noexcept;
 
-        template <class T>
+        template<class T>
         [[nodiscard]] T* getIf() noexcept;
 
-        template <class T>
+        template<class T>
         [[nodiscard]] const T* getIf() const noexcept;
     private:
         std::variant<
@@ -168,17 +168,17 @@ namespace ikk
                 JoystickDisconnected>
             m_data;
 
-        template <class T, class... Ts>
+        template<class T, class... Ts>
         [[nodiscard]] inline static constexpr const bool isInParameterPack(const std::variant<Ts...>*) noexcept
         {
             return std::disjunction_v<std::is_same<T, Ts>...>;
         }
 
-        template <class T>
+        template<class T>
         inline static constexpr bool isEventSubtype = isInParameterPack<T>(decltype (&m_data)(nullptr));
     };
 
-    template <class T>
+    template<class T>
     Event::Event(const T& type) noexcept
     {
         static_assert(isEventSubtype<T>, "T must be a subtype of ikk::Event");
@@ -186,7 +186,7 @@ namespace ikk
             this->m_data = type;
     }
 
-    template <typename T>
+    template<typename T>
     const bool Event::is() const noexcept
     {
         static_assert(isEventSubtype<T>, "T must be a subtype of ikk::Event");
@@ -194,7 +194,7 @@ namespace ikk
             return std::holds_alternative<T>(this->m_data);
     }
 
-    template <class T>
+    template<class T>
     T& Event::get() noexcept
     {
         static_assert(isEventSubtype<T>, "T must be a subtype of ikk::Event");
@@ -202,7 +202,7 @@ namespace ikk
             return std::get<T>(this->m_data);
     }
 
-    template <class T>
+    template<class T>
     const T& Event::get() const noexcept
     {
         static_assert(isEventSubtype<T>, "T must be a subtype of ikk::Event");
@@ -210,7 +210,7 @@ namespace ikk
             return std::get<T>(this->m_data);
     }
 
-    template <class T>
+    template<class T>
     T* Event::getIf() noexcept
     {
         static_assert(isEventSubtype<T>, "T must be a subtype of ikk::Event");
@@ -218,7 +218,7 @@ namespace ikk
             return std::get_if<T>(&this->m_data);
     }
 
-    template <class T>
+    template<class T>
     const T* Event::getIf() const noexcept
     {
         static_assert(isEventSubtype<T>, "T must be a subtype of ikk::Event");

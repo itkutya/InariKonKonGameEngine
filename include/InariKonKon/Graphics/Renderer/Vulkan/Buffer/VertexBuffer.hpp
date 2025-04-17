@@ -24,7 +24,7 @@ namespace ikk
     private:
     };
 
-    template <class VertexType>
+    template<class VertexType>
     VertexBuffer<VertexType>::VertexBuffer(LogicalDevice& logicalDevice, PhysicalDevice& physicalDevice, const std::vector<VertexType>& vertecies) noexcept
         : Buffer(logicalDevice)
     {
@@ -33,7 +33,7 @@ namespace ikk
         this->update((const void*)vertecies.data());
     }
 
-    template <class VertexType>
+    template<class VertexType>
     VertexBuffer<VertexType>::VertexBuffer(LogicalDevice &logicalDevice, PhysicalDevice &physicalDevice, const std::vector<VertexType> &vertecies, CommandPool &commandPool) noexcept
         : Buffer(logicalDevice)
     {

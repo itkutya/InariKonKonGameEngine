@@ -6,9 +6,37 @@
 #include "GLFW/glfw3.h"
 
 #include "InariKonKon/Utility/Log.hpp"
+#include "InariKonKon/Utility/Singleton.hpp"
 
 namespace ikk
 {
+    class ExternalLibraries final : public Singleton<ExternalLibraries>
+    {
+    public:
+        ~ExternalLibraries() noexcept;
+
+        void init() const;
+    protected:
+        ExternalLibraries() noexcept {};
+
+        friend class Singleton<ExternalLibraries>;
+    };
+
+    ExternalLibraries::~ExternalLibraries() noexcept
+    {
+        glfwTerminate();
+    }
+
+    void ExternalLibraries::init() const
+    {
+        glfwInitHint(GLFW_WAYLAND_LIBDECOR, GLFW_WAYLAND_DISABLE_LIBDECOR);
+        if (!glfwInit())
+        {
+            Log("Cannot initialize GLFW.\nExiting ...", Log::FATAL, Log::ALL);
+            throw std::runtime_error("Cannot initialize GLFW.");
+        }
+    }
+
     Window::Window(std::u8string_view title, const std::uint32_t width, const std::uint32_t height)
     try : m_window(createWindow(title, width, height)), m_title(title)
     {
@@ -44,6 +72,8 @@ namespace ikk
 
     GLFWwindow* Window::createWindow(const std::u8string_view title, const std::uint32_t width, const std::uint32_t height)
     {
+        ExternalLibraries::getInstance().init();
+
         glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
         return glfwCreateWindow(INT(width), INT(height), TO_ANSI(title.data()), NULL, NULL);
     }
@@ -55,9 +85,9 @@ namespace ikk
             Log(std::format("{}: {}\n", code, description), ikk::Log::ERROR);
         };
         glfwSetErrorCallback(error_callback);
+
         //TODO:
         //Impl. the rest...
-
         //Window resize event
         static auto windowResizeCallback = [](GLFWwindow* window, int width, int height) noexcept
         {
@@ -94,12 +124,12 @@ namespace ikk
         glfwSetWindowCloseCallback(this->m_window, windowClosedCallback);
     }
 
-    const std::deque<Event> &Window::getEventQueue() const noexcept
+    const std::deque<Event>& Window::getEventQueue() const noexcept
     {
         return this->m_eventQueue;
     }
 
-    std::deque<Event> &Window::getEventQueue() noexcept
+    std::deque<Event>& Window::getEventQueue() noexcept
     {
         return this->m_eventQueue;
     }
