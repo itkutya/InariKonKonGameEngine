@@ -1,6 +1,7 @@
 #include "InariKonKon/Application/Window/Window.hpp"
 
 #include <exception>
+#include <format>
 
 #define GLFW_INCLUDE_VULKAN
 #include "GLFW/glfw3.h"

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.31.5)
+cmake_minimum_required(VERSION 3.28.3)
 
 #Setup cxx std
 set(CMAKE_CXX_STANDARD 26)
@@ -14,9 +14,6 @@ FetchContent_MakeAvailable(fmt)
 
 #Include GLFW
 FetchContent_Declare(glfw GIT_REPOSITORY https://github.com/glfw/glfw.git GIT_TAG master)
-set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
-set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(glfw)
 
 #Setup glm
@@ -45,7 +42,7 @@ find_package(Vulkan REQUIRED shaderc_combined)
 target_include_directories(${CMAKE_PROJECT_NAME} PUBLIC ${INCLUDE_DIR})
 
 #Link libraries
-target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE fmt::fmt glfw glm::glm Vulkan::Vulkan Vulkan::shaderc_combined) #glad_gl_core_43)
+target_link_libraries(${CMAKE_PROJECT_NAME} PUBLIC fmt::fmt glfw glm::glm Vulkan::Vulkan Vulkan::shaderc_combined) #glad_gl_core_43)
 
 #Setup TestApp
 add_executable(TestApp TestApp.cpp)
